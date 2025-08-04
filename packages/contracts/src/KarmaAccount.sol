@@ -29,13 +29,12 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
 
     receive() external payable {}
 
-    constructor(IEntryPoint anEntryPoint) {
-        _entryPoint = anEntryPoint;
+    constructor(IEntryPoint entryPoint_) {
+        _entryPoint = entryPoint_;
         _disableInitializers();
     }
 
     function _onlyOwner() internal view {
-        // Directly from EOA owner, or through the account itself (which gets redirected through execute())
         require(msg.sender == owner || msg.sender == address(this), "only owner");
     }
 

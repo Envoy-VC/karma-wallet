@@ -50,3 +50,4 @@ auto_format = true
 forge-std = "1.9.7"
 eth-infinitism-account-abstraction = "0.8.0"
 "@openzeppelin-contracts" = "5.4.0"
+"@pythnetwork-pyth-sdk-solidity" = "4.2.0"
