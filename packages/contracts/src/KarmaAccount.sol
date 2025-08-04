@@ -10,10 +10,13 @@ import "@eth-infinitism/account-abstraction/contracts/core/BaseAccount.sol";
 import "@eth-infinitism/account-abstraction/contracts/core/Helpers.sol";
 import "@eth-infinitism/account-abstraction/contracts/accounts/callback/TokenCallbackHandler.sol";
 
+import {IOracleAdaptor} from "./interfaces/IOracleAdaptor.sol";
+
 contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Initializable {
     address public owner;
 
     IEntryPoint private immutable _entryPoint;
+    IOracleAdaptor public _oracleAdaptor;
 
     event KarmaAccountInitialized(IEntryPoint indexed entryPoint, address indexed owner);
 
@@ -29,8 +32,9 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
 
     receive() external payable {}
 
-    constructor(IEntryPoint entryPoint_) {
+    constructor(IEntryPoint entryPoint_, IOracleAdaptor oracleAdaptor_) {
         _entryPoint = entryPoint_;
+        _oracleAdaptor = oracleAdaptor_;
         _disableInitializers();
     }
 
@@ -89,7 +93,28 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
         }
     }
 
-    function _executeTipJarLogic(uint256 gasUsed) internal {}
+    function _executeTipJarLogic(uint256 gasUsed) internal {
+        // Get Eth price in USD (18 decimals).
+        uint256 ethPriceInUsd = _oracleAdaptor.getLatestEthPriceInUsd();
+
+        uint256 gasCostInWei = gasUsed * tx.gasprice;
+        uint256 gasCostInUSDCents = (gasCostInWei * ethPriceInUsd) / 1e16; // (1e18 / 100)
+
+        uint256 tipInCents = 0;
+        uint256 roundingTargetCents = 1e16; // For $0.01
+        if (gasCostInUSDCents > 0 && gasCostInUSDCents < roundingTargetCents) {
+            tipInCents = roundingTargetCents - gasCostInUSDCents;
+        }
+
+        if (tipInCents > 0) {
+            // 4. Convert the tip from USD cents back to Wei.
+            uint256 tipInWei = (tipInCents * 1e16) / ethPriceInUsd;
+
+            // TODO: Change to TipJar contract.
+            (bool tipSent,) = (address(this)).call{value: tipInWei}("");
+            if (!tipSent) {}
+        }
+    }
 
     /**
      * check current account deposit in the entryPoint
