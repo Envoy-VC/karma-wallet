@@ -1,11 +1,11 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "aliases": {
-    "components": "@repo/ui/components",
-    "hooks": "@repo/ui/hooks",
-    "lib": "@repo/ui/lib",
-    "ui": "@repo/ui/components",
-    "utils": "@repo/ui/lib/utils"
+    "components": "@karma-wallet/ui/components",
+    "hooks": "@karma-wallet/ui/hooks",
+    "lib": "@karma-wallet/ui/lib",
+    "ui": "@karma-wallet/ui/components",
+    "utils": "@karma-wallet/ui/lib/utils"
   },
   "iconLibrary": "lucide",
   "rsc": true,

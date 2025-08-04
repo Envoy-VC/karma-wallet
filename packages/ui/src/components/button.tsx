@@ -1,7 +1,7 @@
 import type * as react from "react";
 
+import { cn } from "@karma-wallet/ui/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
-import { cn } from "@repo/ui/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
