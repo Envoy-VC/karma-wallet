@@ -157,3 +157,39 @@ pre-commit.log
 prisma/db.sqlite
 prisma/db.sqlite-journal
 db.sqlite
+
+# -------------------------------------
+# Foundry
+# -------------------------------------
+# 💾 Dependencies
+dependencies/
+
+# 🔧 Foundry build artifacts & caches
+out/
+cache/
+
+# 🧪 Forge test artifacts
+test_*.json
+*.dbg.json
+
+# Keystore files
+/*.keystore
+
+# 📊 Coverage & gas reports
+coverage/
+gas-report.*
+
+# 📝 Logs & temporary files
+*.log
+*.tmp
+*.temp
+
+# 🎯 Misc OS-specific
+.DS_Store
+thumbs.db
+
+# ⚙️ Scripting outputs (e.g., Soldeer)
+zkout/
+
+# Local Deployments
+broadcast/**/31337
