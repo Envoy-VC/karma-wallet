@@ -12,11 +12,15 @@ import "@eth-infinitism/account-abstraction/contracts/accounts/callback/TokenCal
 
 import {IOracleAdaptor} from "./interfaces/IOracleAdaptor.sol";
 
+import {console2 as console} from "forge-std/console2.sol";
+
 contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Initializable {
     address public owner;
 
     IEntryPoint private immutable _entryPoint;
     IOracleAdaptor public _oracleAdaptor;
+
+    uint256 public _tips;
 
     event KarmaAccountInitialized(IEntryPoint indexed entryPoint, address indexed owner);
 
@@ -77,7 +81,7 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
     }
 
     function execute(address target, uint256 value, bytes calldata data) external override {
-        _requireForExecute();
+        // _requireForExecute();
 
         uint256 gasPre = gasleft();
         bool ok = Exec.call(target, value, data, gasPre);
@@ -85,7 +89,6 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
 
         uint256 gasUsed = gasPre - gasPost;
 
-        // TODO: Execute JAR logic.
         _executeTipJarLogic(gasUsed);
 
         if (!ok) {
@@ -94,25 +97,31 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
     }
 
     function _executeTipJarLogic(uint256 gasUsed) internal {
-        // Get Eth price in USD (18 decimals).
-        uint256 ethPriceInUsd = _oracleAdaptor.getLatestEthPriceInUsd();
+        // Get Eth price in USD (18 decimals)
+        // uint256 ethPriceInUsd = _oracleAdaptor.getLatestEthPriceInUsd();
+        uint256 ethPriceUSD = 3000 * 1e18;
 
         uint256 gasCostInWei = gasUsed * tx.gasprice;
-        uint256 gasCostInUSDCents = (gasCostInWei * ethPriceInUsd) / 1e16; // (1e18 / 100)
+        uint256 gasCostInUSD = (gasCostInWei * ethPriceUSD) / 1e18;
 
-        uint256 tipInCents = 0;
-        uint256 roundingTargetCents = 1e16; // For $0.01
-        if (gasCostInUSDCents > 0 && gasCostInUSDCents < roundingTargetCents) {
-            tipInCents = roundingTargetCents - gasCostInUSDCents;
+        console.log("gasCostInUSD", gasCostInUSD);
+
+        uint256 tipInUSD = 0;
+        uint256 roundingMultipleUSD = 1e16; // For $0.1
+        if (gasCostInUSD > 0) {
+            uint256 remainder = gasCostInUSD % roundingMultipleUSD;
+            if (remainder > 0) {
+                tipInUSD = roundingMultipleUSD - remainder;
+            }
         }
 
-        if (tipInCents > 0) {
+        if (tipInUSD > 0) {
             // 4. Convert the tip from USD cents back to Wei.
-            uint256 tipInWei = (tipInCents * 1e16) / ethPriceInUsd;
+            uint256 tipInWei = (tipInUSD * 1e18) / ethPriceUSD;
 
-            // TODO: Change to TipJar contract.
-            (bool tipSent,) = (address(this)).call{value: tipInWei}("");
-            if (!tipSent) {}
+            (bool tipSent,) = address(this).call{value: tipInWei}("");
+            require(tipSent, "Failed to send tip");
+            _tips += tipInWei;
         }
     }
 

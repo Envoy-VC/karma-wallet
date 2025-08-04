@@ -4,7 +4,9 @@ pragma solidity ^0.8.26;
 import {Test} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 
-import {Counter} from "src/Counter.sol";
+import {MockOracle} from "src/mocks/MockOracle.sol";
+import {EntryPoint} from "src/Entrypoint.sol";
+import {KarmaAccountFactory} from "src/KarmaAccountFactory.sol";
 
 contract SetUp is Test {
     struct Accounts {
@@ -15,13 +17,18 @@ contract SetUp is Test {
         Vm.Wallet erlich;
     }
 
-    Counter public counter;
+    MockOracle public oracle;
+    EntryPoint public entryPoint;
+    KarmaAccountFactory public factory;
 
     Accounts public accounts;
 
     function setUp() public virtual {
         _setUpTestAccounts();
-        counter = new Counter();
+
+        oracle = new MockOracle();
+        entryPoint = new EntryPoint();
+        factory = new KarmaAccountFactory(entryPoint, oracle);
     }
 
     function _setUpTestAccounts() internal {
