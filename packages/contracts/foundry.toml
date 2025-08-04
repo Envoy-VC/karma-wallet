@@ -2,7 +2,7 @@
 # 🛠 Default Profile – local dev & CI
 # -------------------------------------------------------------
 [profile.default]
-solc_version = "0.8.26"
+solc_version = "0.8.28"
 evm_version = "cancun"
 optimizer = true
 optimizer_runs = 20000
@@ -48,3 +48,5 @@ auto_format = true
 # -------------------------------------------------------------
 [dependencies]
 forge-std = "1.9.7"
+eth-infinitism-account-abstraction = "0.8.0"
+"@openzeppelin-contracts" = "5.4.0"
