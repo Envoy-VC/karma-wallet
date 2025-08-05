@@ -12,7 +12,7 @@ import "@eth-infinitism/account-abstraction/contracts/accounts/callback/TokenCal
 
 import {IOracleAdaptor} from "./interfaces/IOracleAdaptor.sol";
 
-import {console2 as console} from "forge-std/console2.sol";
+import {Jar} from "./Jar.sol";
 
 contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Initializable {
     address public owner;
@@ -20,7 +20,7 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
     IEntryPoint private immutable _entryPoint;
     IOracleAdaptor public _oracleAdaptor;
 
-    uint256 public _tips;
+    Jar public _tipJar;
 
     event KarmaAccountInitialized(IEntryPoint indexed entryPoint, address indexed owner);
 
@@ -36,9 +36,8 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
 
     receive() external payable {}
 
-    constructor(IEntryPoint entryPoint_, IOracleAdaptor oracleAdaptor_) {
+    constructor(IEntryPoint entryPoint_) {
         _entryPoint = entryPoint_;
-        _oracleAdaptor = oracleAdaptor_;
         _disableInitializers();
     }
 
@@ -52,7 +51,9 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
      * the implementation by calling `upgradeTo()`
      * @param anOwner the owner (signer) of this account
      */
-    function initialize(address anOwner) public virtual initializer {
+    function initialize(address anOwner, address oracleAdaptor_) public virtual initializer {
+        _oracleAdaptor = IOracleAdaptor(oracleAdaptor_);
+        _tipJar = new Jar(payable(address(this)));
         _initialize(anOwner);
     }
 
@@ -97,17 +98,13 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
     }
 
     function _executeTipJarLogic(uint256 gasUsed) internal {
-        // Get Eth price in USD (18 decimals)
-        // uint256 ethPriceInUsd = _oracleAdaptor.getLatestEthPriceInUsd();
-        uint256 ethPriceUSD = 3000 * 1e18;
+        uint256 ethPriceUSD = _oracleAdaptor.getLatestEthPriceInUsd();
 
         uint256 gasCostInWei = gasUsed * tx.gasprice;
         uint256 gasCostInUSD = (gasCostInWei * ethPriceUSD) / 1e18;
 
-        console.log("gasCostInUSD", gasCostInUSD);
-
         uint256 tipInUSD = 0;
-        uint256 roundingMultipleUSD = 1e16; // For $0.1
+        uint256 roundingMultipleUSD = 1e16; // For rounding to nearest $0.01
         if (gasCostInUSD > 0) {
             uint256 remainder = gasCostInUSD % roundingMultipleUSD;
             if (remainder > 0) {
@@ -116,12 +113,10 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
         }
 
         if (tipInUSD > 0) {
-            // 4. Convert the tip from USD cents back to Wei.
             uint256 tipInWei = (tipInUSD * 1e18) / ethPriceUSD;
 
-            (bool tipSent,) = address(this).call{value: tipInWei}("");
+            (bool tipSent,) = address(_tipJar).call{value: tipInWei}("");
             require(tipSent, "Failed to send tip");
-            _tips += tipInWei;
         }
     }
 

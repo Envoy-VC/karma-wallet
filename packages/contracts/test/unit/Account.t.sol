@@ -55,20 +55,30 @@ contract CounterUnitTest is Test, SetUp {
         vm.stopBroadcast();
 
         vm.startBroadcast(owner);
-        console.log("Richard Address", owner);
-        console.log("Account Address", address(account));
+        console.log("Owner Address", owner);
+        console.log("Smart Account Address", address(account));
 
-        uint256 tipJarBalance = (account._tips());
+        uint256 tipJarBalance = address(account._tipJar()).balance;
         console.log("Tip Jar Balance Before Execution", ethToUsd(tipJarBalance));
 
         vm.deal(address(account), 100 ether);
 
         bytes memory data = bytes("0x");
-        vm.txGasPrice(4 * 1e8);
+        vm.txGasPrice(2 * 1e8);
+        uint256 gasPre = gasleft();
         account.execute(accounts.gilfoyle.addr, 1 ether, data);
+        uint256 gasPost = gasleft();
+        uint256 gasUsed = gasPre - gasPost;
 
-        tipJarBalance = account._tips();
-        console.log("Tip Jar Balance After Execution", ethToUsd(tipJarBalance));
+        uint256 ethPriceUSD = oracle.getLatestEthPriceInUsd();
+
+        uint256 gasCostInWei = gasUsed * tx.gasprice;
+        uint256 gasCostInUSD = (gasCostInWei * ethPriceUSD) / 1e18;
+
+        console.log("Gas Cost in USD", parseDecimal(gasCostInUSD, 18, 4));
+
+        tipJarBalance = address(account._tipJar()).balance;
+        console.log("Tip Received", ethToUsd(tipJarBalance));
         vm.stopBroadcast();
     }
 }

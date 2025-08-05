@@ -16,7 +16,7 @@ contract KarmaAccountFactory {
 
     constructor(IEntryPoint _entryPoint, IOracleAdaptor oracleAdaptor_) {
         _oracleAdaptor = oracleAdaptor_;
-        accountImplementation = new KarmaAccount(_entryPoint, _oracleAdaptor);
+        accountImplementation = new KarmaAccount(_entryPoint);
         senderCreator = _entryPoint.senderCreator();
     }
 
@@ -36,7 +36,8 @@ contract KarmaAccountFactory {
         ret = KarmaAccount(
             payable(
                 new ERC1967Proxy{salt: bytes32(salt)}(
-                    address(accountImplementation), abi.encodeCall(KarmaAccount.initialize, (owner))
+                    address(accountImplementation),
+                    abi.encodeCall(KarmaAccount.initialize, (owner, address(_oracleAdaptor)))
                 )
             )
         );
@@ -51,7 +52,10 @@ contract KarmaAccountFactory {
             keccak256(
                 abi.encodePacked(
                     type(ERC1967Proxy).creationCode,
-                    abi.encode(address(accountImplementation), abi.encodeCall(KarmaAccount.initialize, (owner)))
+                    abi.encode(
+                        address(accountImplementation),
+                        abi.encodeCall(KarmaAccount.initialize, (owner, address(_oracleAdaptor)))
+                    )
                 )
             )
         );

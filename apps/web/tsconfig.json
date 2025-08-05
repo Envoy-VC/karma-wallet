@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@repo/ui/*": ["../../packages/ui/src/*"]
+      "@karma-wallet/ui/*": ["../../packages/ui/src/*"]
     }
   },
   "exclude": ["node_modules", "dist"],
