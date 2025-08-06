@@ -8,7 +8,7 @@ const core = new Core({
 });
 
 export const walletKit = await WalletKit.init({
-  core, // <- pass the shared `core` instance
+  core,
   metadata: {
     description: "Demo Client as Wallet/Peer",
     icons: [],

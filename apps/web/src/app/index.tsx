@@ -1,14 +1,17 @@
-import { Button } from "@karma-wallet/ui/components/button";
 import { createFileRoute } from "@tanstack/react-router";
 
-const HomeComponent = () => {
+import { CreateAccount } from "@/components";
+
+const Home = () => {
   return (
-    <div className="">
-      <Button>Hello World</Button>
+    <div className="relative h-screen w-full">
+      <div className="absolute top-1/4 right-1/2 translate-x-1/2">
+        <CreateAccount />
+      </div>
     </div>
   );
 };
 
 export const Route = createFileRoute("/")({
-  component: HomeComponent,
+  component: Home,
 });

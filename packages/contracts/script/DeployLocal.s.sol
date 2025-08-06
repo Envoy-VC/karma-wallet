@@ -15,7 +15,7 @@ contract DeployLocal is Script {
     KarmaAccountFactory public factory;
 
     function run() external {
-        vm.startBroadcast();
+        vm.startBroadcast(0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6);
 
         oracle = new MockOracle(3000e18);
         entryPoint = new EntryPoint();
@@ -24,6 +24,13 @@ contract DeployLocal is Script {
         console.log("MockOracle", address(oracle));
         console.log("EntryPoint", address(entryPoint));
         console.log("KarmaAccountFactory", address(factory));
+        address impl = address(factory.accountImplementation());
+        console.log("KarmaAccountImplementation", impl);
+
+        address testAddress = 0xc0d86456F6f2930b892f3DAD007CDBE32c081FE6;
+        // Fund the test address
+        (bool success,) = testAddress.call{value: 1 ether}("");
+        require(success, "Failed to send Ether");
 
         vm.stopBroadcast();
     }

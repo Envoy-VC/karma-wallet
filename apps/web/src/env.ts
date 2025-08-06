@@ -3,6 +3,7 @@ import { z } from "zod/v4";
 
 export const env = createEnv({
   client: {
+    VITE_BUNDLER_URL: z.string(),
     VITE_REOWN_PROJECT_ID: z.string(),
   },
   clientPrefix: "VITE_",
