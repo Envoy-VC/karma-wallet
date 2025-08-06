@@ -26,7 +26,7 @@ contract SetUp is Test {
     function setUp() public virtual {
         _setUpTestAccounts();
 
-        oracle = new MockOracle();
+        oracle = new MockOracle(3000e18);
         entryPoint = new EntryPoint();
         factory = new KarmaAccountFactory(entryPoint, oracle);
     }
