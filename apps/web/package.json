@@ -1,14 +1,22 @@
 {
   "dependencies": {
     "@karma-wallet/ui": "workspace:*",
+    "@reown/appkit": "^1.7.18",
+    "@reown/appkit-adapter-wagmi": "^1.7.18",
+    "@reown/walletkit": "^1.2.9",
     "@t3-oss/env-core": "^0.13.8",
     "@tanstack/react-query": "^5.84.1",
     "@tanstack/react-router": "^1.130.12",
     "@tanstack/router-devtools": "^1.130.13",
+    "@walletconnect/core": "^2.21.6",
+    "@walletconnect/utils": "^2.21.6",
     "lucide-react": "^0.536.0",
+    "permissionless": "^0.2.52",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "usehooks-ts": "^3.1.1",
+    "viem": "^2.33.2",
+    "wagmi": "^2.16.1",
     "zod": "^4.0.14",
     "zustand": "^5.0.7"
   },

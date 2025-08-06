@@ -10,7 +10,13 @@
 
 import { Route as rootRouteImport } from "./app/__root";
 import { Route as IndexRouteImport } from "./app/index";
+import { Route as WcRouteImport } from "./app/wc";
 
+const WcRoute = WcRouteImport.update({
+  getParentRoute: () => rootRouteImport,
+  id: "/wc",
+  path: "/wc",
+} as any);
 const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
   id: "/",
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
+  "/wc": typeof WcRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
+  "/wc": typeof WcRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
+  "/wc": typeof WcRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/";
+  fullPaths: "/" | "/wc";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/";
-  id: "__root__" | "/";
+  to: "/" | "/wc";
+  id: "__root__" | "/" | "/wc";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  WcRoute: typeof WcRoute;
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
+    "/wc": {
+      id: "/wc";
+      path: "/wc";
+      fullPath: "/wc";
+      preLoaderRoute: typeof WcRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/": {
       id: "/";
       path: "/";
@@ -53,6 +70,7 @@ declare module "@tanstack/react-router" {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WcRoute: WcRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
