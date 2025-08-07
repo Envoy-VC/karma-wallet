@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@karma-wallet/ui/components/sidebar";
-import { WalletIcon } from "@karma-wallet/ui/icons";
+import { SettingsIcon } from "@karma-wallet/ui/icons";
 import { cn } from "@karma-wallet/ui/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
@@ -15,9 +15,9 @@ import { motion } from "motion/react";
 const settingsGroupItems = [
   {
     href: "/dashboard/settings",
-    icon: WalletIcon,
-    id: "wallet",
-    title: "Wallet",
+    icon: SettingsIcon,
+    id: "settings",
+    title: "Settings",
   },
 ];
 

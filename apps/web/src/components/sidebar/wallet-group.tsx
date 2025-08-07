@@ -7,33 +7,33 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@karma-wallet/ui/components/sidebar";
-import { EthereumLogo, UsersIcon } from "@karma-wallet/ui/icons";
+import { ActivityIcon, WalletIcon } from "@karma-wallet/ui/icons";
 import { cn } from "@karma-wallet/ui/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { BottleWineIcon, TargetIcon } from "lucide-react";
+import { PiggyBankIcon, TargetIcon } from "lucide-react";
 import { motion } from "motion/react";
 
 const walletGroupItems = [
   {
     href: "/dashboard/assets",
-    icon: UsersIcon,
+    icon: WalletIcon,
     id: "assets",
     title: "Assets",
   },
   {
     href: "/dashboard/activity",
-    icon: EthereumLogo,
+    icon: ActivityIcon,
     id: "activity",
     title: "Activity",
   },
   {
-    href: "/dashboard/jar",
-    icon: BottleWineIcon,
-    id: "jar",
-    title: "Jar",
+    href: "/dashboard/savings",
+    icon: PiggyBankIcon,
+    id: "savings",
+    title: "Savings",
   },
   {
-    href: "/dashboard/activity",
+    href: "/dashboard/goals",
     icon: TargetIcon,
     id: "goals",
     title: "Goals",
