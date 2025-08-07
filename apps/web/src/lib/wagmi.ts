@@ -3,18 +3,18 @@ import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { createPimlicoClient } from "permissionless/clients/pimlico";
 import { createPublicClient } from "viem";
 import { entryPoint07Address } from "viem/account-abstraction";
-import { createConfig, http } from "wagmi";
-import { anvil, type Chain } from "wagmi/chains";
+import { http } from "wagmi";
+import { type Chain, morphSepolia } from "wagmi/chains";
 
 import { env } from "@/env";
 
 const projectId = env.VITE_REOWN_PROJECT_ID;
 const bundlerUrl = env.VITE_BUNDLER_URL;
 
-const networks = [anvil] as [Chain];
+const networks = [morphSepolia] as [Chain];
 
 export const publicClient = createPublicClient({
-  chain: anvil,
+  chain: morphSepolia,
   transport: http(),
 });
 
@@ -54,12 +54,5 @@ createAppKit({
   themeVariables: {
     "--w3m-accent": "#000",
     "--w3m-border-radius-master": "4px",
-  },
-});
-
-export const wagmiConfig = createConfig({
-  chains: [anvil],
-  transports: {
-    [anvil.id]: http(),
   },
 });

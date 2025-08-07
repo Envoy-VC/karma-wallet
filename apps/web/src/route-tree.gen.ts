@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./app/__root";
+import { Route as CreateRouteImport } from "./app/create";
+import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
 import { Route as IndexRouteImport } from "./app/index";
 import { Route as WcRouteImport } from "./app/wc";
 
@@ -16,6 +18,16 @@ const WcRoute = WcRouteImport.update({
   getParentRoute: () => rootRouteImport,
   id: "/wc",
   path: "/wc",
+} as any);
+const CreateRoute = CreateRouteImport.update({
+  getParentRoute: () => rootRouteImport,
+  id: "/create",
+  path: "/create",
+} as any);
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  getParentRoute: () => rootRouteImport,
+  id: "/dashboard",
+  path: "/dashboard",
 } as any);
 const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
@@ -25,27 +37,35 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRouteRoute;
+  "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRouteRoute;
+  "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
+  "/dashboard": typeof DashboardRouteRoute;
+  "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/wc";
+  fullPaths: "/" | "/dashboard" | "/create" | "/wc";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/wc";
-  id: "__root__" | "/" | "/wc";
+  to: "/" | "/dashboard" | "/create" | "/wc";
+  id: "__root__" | "/" | "/dashboard" | "/create" | "/wc";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  DashboardRouteRoute: typeof DashboardRouteRoute;
+  CreateRoute: typeof CreateRoute;
   WcRoute: typeof WcRoute;
 }
 
@@ -56,6 +76,20 @@ declare module "@tanstack/react-router" {
       path: "/wc";
       fullPath: "/wc";
       preLoaderRoute: typeof WcRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/create": {
+      id: "/create";
+      path: "/create";
+      fullPath: "/create";
+      preLoaderRoute: typeof CreateRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/dashboard": {
+      id: "/dashboard";
+      path: "/dashboard";
+      fullPath: "/dashboard";
+      preLoaderRoute: typeof DashboardRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/": {
@@ -69,6 +103,8 @@ declare module "@tanstack/react-router" {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  CreateRoute: CreateRoute,
+  DashboardRouteRoute: DashboardRouteRoute,
   IndexRoute: IndexRoute,
   WcRoute: WcRoute,
 };
