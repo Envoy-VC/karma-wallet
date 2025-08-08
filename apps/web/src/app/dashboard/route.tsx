@@ -11,10 +11,10 @@ export const Route = createFileRoute("/dashboard")({
 function RouteComponent() {
   const { pathname } = useLocation();
   return (
-    <SidebarProvider className="flex flex-col">
+    <SidebarProvider>
       <Sidebar />
-      <MobileSidebar />
-      <div className="h-full w-full">
+      <div className="flex h-full w-full flex-col">
+        <MobileSidebar />
         <AnimatePresence mode="popLayout">
           <motion.div
             animate={{ opacity: 1, y: 0 }}

@@ -13,7 +13,7 @@ import { Route as CreateRouteImport } from "./app/create";
 import { Route as DashboardGoalsRouteImport } from "./app/dashboard/goals";
 import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
 import { Route as DashboardSavingsRouteImport } from "./app/dashboard/savings";
-import { Route as DashboardSendRouteImport } from "./app/dashboard/send";
+import { Route as DashboardSendIndexRouteImport } from "./app/dashboard/send/index";
 import { Route as DashboardSettingsRouteImport } from "./app/dashboard/settings";
 import { Route as IndexRouteImport } from "./app/index";
 import { Route as WcRouteImport } from "./app/wc";
@@ -43,11 +43,6 @@ const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: "/settings",
   path: "/settings",
 } as any);
-const DashboardSendRoute = DashboardSendRouteImport.update({
-  getParentRoute: () => DashboardRouteRoute,
-  id: "/send",
-  path: "/send",
-} as any);
 const DashboardSavingsRoute = DashboardSavingsRouteImport.update({
   getParentRoute: () => DashboardRouteRoute,
   id: "/savings",
@@ -58,6 +53,11 @@ const DashboardGoalsRoute = DashboardGoalsRouteImport.update({
   id: "/goals",
   path: "/goals",
 } as any);
+const DashboardSendIndexRoute = DashboardSendIndexRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/send/",
+  path: "/send/",
+} as any);
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
@@ -66,8 +66,8 @@ export interface FileRoutesByFullPath {
   "/wc": typeof WcRoute;
   "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
-  "/dashboard/send": typeof DashboardSendRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/send": typeof DashboardSendIndexRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
@@ -76,8 +76,8 @@ export interface FileRoutesByTo {
   "/wc": typeof WcRoute;
   "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
-  "/dashboard/send": typeof DashboardSendRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/send": typeof DashboardSendIndexRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
@@ -87,8 +87,8 @@ export interface FileRoutesById {
   "/wc": typeof WcRoute;
   "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
-  "/dashboard/send": typeof DashboardSendRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/send/": typeof DashboardSendIndexRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
@@ -99,8 +99,8 @@ export interface FileRouteTypes {
     | "/wc"
     | "/dashboard/goals"
     | "/dashboard/savings"
-    | "/dashboard/send"
-    | "/dashboard/settings";
+    | "/dashboard/settings"
+    | "/dashboard/send";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
@@ -109,8 +109,8 @@ export interface FileRouteTypes {
     | "/wc"
     | "/dashboard/goals"
     | "/dashboard/savings"
-    | "/dashboard/send"
-    | "/dashboard/settings";
+    | "/dashboard/settings"
+    | "/dashboard/send";
   id:
     | "__root__"
     | "/"
@@ -119,8 +119,8 @@ export interface FileRouteTypes {
     | "/wc"
     | "/dashboard/goals"
     | "/dashboard/savings"
-    | "/dashboard/send"
-    | "/dashboard/settings";
+    | "/dashboard/settings"
+    | "/dashboard/send/";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -167,13 +167,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSettingsRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
-    "/dashboard/send": {
-      id: "/dashboard/send";
-      path: "/send";
-      fullPath: "/dashboard/send";
-      preLoaderRoute: typeof DashboardSendRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
     "/dashboard/savings": {
       id: "/dashboard/savings";
       path: "/savings";
@@ -188,20 +181,27 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardGoalsRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
+    "/dashboard/send/": {
+      id: "/dashboard/send/";
+      path: "/send";
+      fullPath: "/dashboard/send";
+      preLoaderRoute: typeof DashboardSendIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
   }
 }
 
 interface DashboardRouteRouteChildren {
   DashboardGoalsRoute: typeof DashboardGoalsRoute;
   DashboardSavingsRoute: typeof DashboardSavingsRoute;
-  DashboardSendRoute: typeof DashboardSendRoute;
   DashboardSettingsRoute: typeof DashboardSettingsRoute;
+  DashboardSendIndexRoute: typeof DashboardSendIndexRoute;
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardGoalsRoute: DashboardGoalsRoute,
   DashboardSavingsRoute: DashboardSavingsRoute,
-  DashboardSendRoute: DashboardSendRoute,
+  DashboardSendIndexRoute: DashboardSendIndexRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
 };
 
