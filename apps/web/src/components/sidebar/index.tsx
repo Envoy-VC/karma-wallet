@@ -12,6 +12,7 @@ import { PanelRightIcon } from "@karma-wallet/ui/icons";
 import { SidebarFooter } from "./footer";
 import { SidebarHeader } from "./header";
 import { MainGroup } from "./main-group";
+import { MobileSidebar } from "./mobile";
 import { SettingsGroup } from "./settings-group";
 import { WalletGroup } from "./wallet-group";
 
@@ -54,3 +55,5 @@ export const Sidebar = () => {
     </SidebarCore>
   );
 };
+
+export { MobileSidebar };

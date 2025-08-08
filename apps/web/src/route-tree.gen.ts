@@ -10,8 +10,6 @@
 
 import { Route as rootRouteImport } from "./app/__root";
 import { Route as CreateRouteImport } from "./app/create";
-import { Route as DashboardActivityRouteImport } from "./app/dashboard/activity";
-import { Route as DashboardAssetsRouteImport } from "./app/dashboard/assets";
 import { Route as DashboardGoalsRouteImport } from "./app/dashboard/goals";
 import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
 import { Route as DashboardSavingsRouteImport } from "./app/dashboard/savings";
@@ -60,24 +58,12 @@ const DashboardGoalsRoute = DashboardGoalsRouteImport.update({
   id: "/goals",
   path: "/goals",
 } as any);
-const DashboardAssetsRoute = DashboardAssetsRouteImport.update({
-  getParentRoute: () => DashboardRouteRoute,
-  id: "/assets",
-  path: "/assets",
-} as any);
-const DashboardActivityRoute = DashboardActivityRouteImport.update({
-  getParentRoute: () => DashboardRouteRoute,
-  id: "/activity",
-  path: "/activity",
-} as any);
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
-  "/dashboard/activity": typeof DashboardActivityRoute;
-  "/dashboard/assets": typeof DashboardAssetsRoute;
   "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/send": typeof DashboardSendRoute;
@@ -88,8 +74,6 @@ export interface FileRoutesByTo {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
-  "/dashboard/activity": typeof DashboardActivityRoute;
-  "/dashboard/assets": typeof DashboardAssetsRoute;
   "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/send": typeof DashboardSendRoute;
@@ -101,8 +85,6 @@ export interface FileRoutesById {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
-  "/dashboard/activity": typeof DashboardActivityRoute;
-  "/dashboard/assets": typeof DashboardAssetsRoute;
   "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/send": typeof DashboardSendRoute;
@@ -115,8 +97,6 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/create"
     | "/wc"
-    | "/dashboard/activity"
-    | "/dashboard/assets"
     | "/dashboard/goals"
     | "/dashboard/savings"
     | "/dashboard/send"
@@ -127,8 +107,6 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/create"
     | "/wc"
-    | "/dashboard/activity"
-    | "/dashboard/assets"
     | "/dashboard/goals"
     | "/dashboard/savings"
     | "/dashboard/send"
@@ -139,8 +117,6 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/create"
     | "/wc"
-    | "/dashboard/activity"
-    | "/dashboard/assets"
     | "/dashboard/goals"
     | "/dashboard/savings"
     | "/dashboard/send"
@@ -212,26 +188,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardGoalsRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
-    "/dashboard/assets": {
-      id: "/dashboard/assets";
-      path: "/assets";
-      fullPath: "/dashboard/assets";
-      preLoaderRoute: typeof DashboardAssetsRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
-    "/dashboard/activity": {
-      id: "/dashboard/activity";
-      path: "/activity";
-      fullPath: "/dashboard/activity";
-      preLoaderRoute: typeof DashboardActivityRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
   }
 }
 
 interface DashboardRouteRouteChildren {
-  DashboardActivityRoute: typeof DashboardActivityRoute;
-  DashboardAssetsRoute: typeof DashboardAssetsRoute;
   DashboardGoalsRoute: typeof DashboardGoalsRoute;
   DashboardSavingsRoute: typeof DashboardSavingsRoute;
   DashboardSendRoute: typeof DashboardSendRoute;
@@ -239,8 +199,6 @@ interface DashboardRouteRouteChildren {
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardActivityRoute: DashboardActivityRoute,
-  DashboardAssetsRoute: DashboardAssetsRoute,
   DashboardGoalsRoute: DashboardGoalsRoute,
   DashboardSavingsRoute: DashboardSavingsRoute,
   DashboardSendRoute: DashboardSendRoute,

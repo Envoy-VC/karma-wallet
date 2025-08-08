@@ -19,7 +19,7 @@ export const SendContainer = () => {
   } = useSend();
 
   return (
-    <div className="flex w-full max-w-sm flex-col gap-4 rounded-2xl">
+    <div className="mx-auto flex w-full max-w-sm flex-col gap-4 rounded-2xl">
       <div className="relative flex flex-col gap-1">
         <div className="-translate-y-1/2 absolute top-1/2 right-1/2 translate-x-1/2">
           <div className="flex size-8 items-center justify-center rounded-lg border border-neutral-200/50 bg-neutral-100">

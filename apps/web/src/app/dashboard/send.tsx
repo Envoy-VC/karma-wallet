@@ -8,8 +8,8 @@ export const Route = createFileRoute("/dashboard/send")({
 
 function SendPage() {
   return (
-    <div className="relative h-full">
-      <div className="absolute top-1/8 right-1/2 w-full max-w-sm translate-x-1/2">
+    <div className="h-full">
+      <div className="translate-y-1/2">
         <SendContainer />
       </div>
     </div>

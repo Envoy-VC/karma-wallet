@@ -23,7 +23,7 @@ export const SidebarHeader = () => {
           )}
         >
           <Link className="group/header-icon flex flex-row items-center" to="/">
-            <SidebarMenuButton className="!p-0 !m-0 !size-16 flex cursor-pointer items-center justify-center transition-all duration-300 ease-in-out group-hover/header-icon:rotate-3 group-hover/header-icon:scale-[107%] group-data-[collapsible=icon]:size-12! [&>svg]:size-7">
+            <SidebarMenuButton className="!p-0 !m-0 !size-16 flex cursor-pointer items-center justify-center transition-all duration-300 ease-in-out hover:bg-transparent group-hover/header-icon:rotate-3 group-hover/header-icon:scale-[107%] group-data-[collapsible=icon]:size-12! [&>svg]:size-7">
               <KarmaLogo fill="#000" />
             </SidebarMenuButton>
             <div
