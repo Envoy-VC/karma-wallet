@@ -28,11 +28,11 @@ const buttonVariants = cva(
         default: "h-10 px-4 py-2 has-[>svg]:px-3",
         icon: "size-9 rounded-lg",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        sm: "h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5",
+        sm: "h-8 gap-1.5 rounded-md px-3 text-sm has-[>svg]:px-2.5",
       },
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary",
+          "bg-primary text-primary-foreground shadow-xs hover:bg-primary disabled:bg-primary/70",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20",
         "duotone-destructive":
