@@ -10,7 +10,13 @@
 
 import { Route as rootRouteImport } from "./app/__root";
 import { Route as CreateRouteImport } from "./app/create";
+import { Route as DashboardActivityRouteImport } from "./app/dashboard/activity";
+import { Route as DashboardAssetsRouteImport } from "./app/dashboard/assets";
+import { Route as DashboardGoalsRouteImport } from "./app/dashboard/goals";
 import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
+import { Route as DashboardSavingsRouteImport } from "./app/dashboard/savings";
+import { Route as DashboardSendRouteImport } from "./app/dashboard/send";
+import { Route as DashboardSettingsRouteImport } from "./app/dashboard/settings";
 import { Route as IndexRouteImport } from "./app/index";
 import { Route as WcRouteImport } from "./app/wc";
 
@@ -34,37 +40,116 @@ const IndexRoute = IndexRouteImport.update({
   id: "/",
   path: "/",
 } as any);
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/settings",
+  path: "/settings",
+} as any);
+const DashboardSendRoute = DashboardSendRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/send",
+  path: "/send",
+} as any);
+const DashboardSavingsRoute = DashboardSavingsRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/savings",
+  path: "/savings",
+} as any);
+const DashboardGoalsRoute = DashboardGoalsRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/goals",
+  path: "/goals",
+} as any);
+const DashboardAssetsRoute = DashboardAssetsRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/assets",
+  path: "/assets",
+} as any);
+const DashboardActivityRoute = DashboardActivityRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/activity",
+  path: "/activity",
+} as any);
 
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
-  "/dashboard": typeof DashboardRouteRoute;
+  "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
+  "/dashboard/activity": typeof DashboardActivityRoute;
+  "/dashboard/assets": typeof DashboardAssetsRoute;
+  "/dashboard/goals": typeof DashboardGoalsRoute;
+  "/dashboard/savings": typeof DashboardSavingsRoute;
+  "/dashboard/send": typeof DashboardSendRoute;
+  "/dashboard/settings": typeof DashboardSettingsRoute;
 }
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
-  "/dashboard": typeof DashboardRouteRoute;
+  "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
+  "/dashboard/activity": typeof DashboardActivityRoute;
+  "/dashboard/assets": typeof DashboardAssetsRoute;
+  "/dashboard/goals": typeof DashboardGoalsRoute;
+  "/dashboard/savings": typeof DashboardSavingsRoute;
+  "/dashboard/send": typeof DashboardSendRoute;
+  "/dashboard/settings": typeof DashboardSettingsRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/": typeof IndexRoute;
-  "/dashboard": typeof DashboardRouteRoute;
+  "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
+  "/dashboard/activity": typeof DashboardActivityRoute;
+  "/dashboard/assets": typeof DashboardAssetsRoute;
+  "/dashboard/goals": typeof DashboardGoalsRoute;
+  "/dashboard/savings": typeof DashboardSavingsRoute;
+  "/dashboard/send": typeof DashboardSendRoute;
+  "/dashboard/settings": typeof DashboardSettingsRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/dashboard" | "/create" | "/wc";
+  fullPaths:
+    | "/"
+    | "/dashboard"
+    | "/create"
+    | "/wc"
+    | "/dashboard/activity"
+    | "/dashboard/assets"
+    | "/dashboard/goals"
+    | "/dashboard/savings"
+    | "/dashboard/send"
+    | "/dashboard/settings";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/dashboard" | "/create" | "/wc";
-  id: "__root__" | "/" | "/dashboard" | "/create" | "/wc";
+  to:
+    | "/"
+    | "/dashboard"
+    | "/create"
+    | "/wc"
+    | "/dashboard/activity"
+    | "/dashboard/assets"
+    | "/dashboard/goals"
+    | "/dashboard/savings"
+    | "/dashboard/send"
+    | "/dashboard/settings";
+  id:
+    | "__root__"
+    | "/"
+    | "/dashboard"
+    | "/create"
+    | "/wc"
+    | "/dashboard/activity"
+    | "/dashboard/assets"
+    | "/dashboard/goals"
+    | "/dashboard/savings"
+    | "/dashboard/send"
+    | "/dashboard/settings";
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  DashboardRouteRoute: typeof DashboardRouteRoute;
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
   CreateRoute: typeof CreateRoute;
   WcRoute: typeof WcRoute;
 }
@@ -99,12 +184,76 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    "/dashboard/settings": {
+      id: "/dashboard/settings";
+      path: "/settings";
+      fullPath: "/dashboard/settings";
+      preLoaderRoute: typeof DashboardSettingsRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/send": {
+      id: "/dashboard/send";
+      path: "/send";
+      fullPath: "/dashboard/send";
+      preLoaderRoute: typeof DashboardSendRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/savings": {
+      id: "/dashboard/savings";
+      path: "/savings";
+      fullPath: "/dashboard/savings";
+      preLoaderRoute: typeof DashboardSavingsRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/goals": {
+      id: "/dashboard/goals";
+      path: "/goals";
+      fullPath: "/dashboard/goals";
+      preLoaderRoute: typeof DashboardGoalsRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/assets": {
+      id: "/dashboard/assets";
+      path: "/assets";
+      fullPath: "/dashboard/assets";
+      preLoaderRoute: typeof DashboardAssetsRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
+    "/dashboard/activity": {
+      id: "/dashboard/activity";
+      path: "/activity";
+      fullPath: "/dashboard/activity";
+      preLoaderRoute: typeof DashboardActivityRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
   }
 }
 
+interface DashboardRouteRouteChildren {
+  DashboardActivityRoute: typeof DashboardActivityRoute;
+  DashboardAssetsRoute: typeof DashboardAssetsRoute;
+  DashboardGoalsRoute: typeof DashboardGoalsRoute;
+  DashboardSavingsRoute: typeof DashboardSavingsRoute;
+  DashboardSendRoute: typeof DashboardSendRoute;
+  DashboardSettingsRoute: typeof DashboardSettingsRoute;
+}
+
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardActivityRoute: DashboardActivityRoute,
+  DashboardAssetsRoute: DashboardAssetsRoute,
+  DashboardGoalsRoute: DashboardGoalsRoute,
+  DashboardSavingsRoute: DashboardSavingsRoute,
+  DashboardSendRoute: DashboardSendRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+};
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+);
+
 const rootRouteChildren: RootRouteChildren = {
   CreateRoute: CreateRoute,
-  DashboardRouteRoute: DashboardRouteRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   IndexRoute: IndexRoute,
   WcRoute: WcRoute,
 };

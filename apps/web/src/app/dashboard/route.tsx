@@ -19,6 +19,7 @@ function RouteComponent() {
         <AnimatePresence mode="popLayout">
           <motion.div
             animate={{ opacity: 1, y: 0 }}
+            className="h-screen p-6"
             exit={{ opacity: 1 }}
             initial={{ opacity: 0.5, y: -20 }}
             key={pathname}

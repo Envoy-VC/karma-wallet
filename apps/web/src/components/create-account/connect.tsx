@@ -34,10 +34,10 @@ export const ConnectWallet = () => {
 
   if (address)
     return (
-      <div className="flex h-9 items-center justify-between rounded-2xl border-[1.5px] border-neutral-400 px-3 text-neutral-400">
+      <div className="flex h-10 items-center justify-between rounded-xl border-[1.5px] border-neutral-600 px-3 text-neutral-600">
         <div>{truncateEthAddress(address)}</div>
         <Button onClick={onDisconnect} size="icon" variant="link">
-          <LogOutIcon className="text-neutral-400" strokeWidth={2} />
+          <LogOutIcon className="text-neutral-600" strokeWidth={2} />
         </Button>
       </div>
     );
