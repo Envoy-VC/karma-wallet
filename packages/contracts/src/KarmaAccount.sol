@@ -20,7 +20,7 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
     IEntryPoint private immutable _entryPoint;
     IOracleAdaptor public _oracleAdaptor;
 
-    Jar public _tipJar;
+    Jar public _jar;
 
     event KarmaAccountInitialized(IEntryPoint indexed entryPoint, address indexed owner);
 
@@ -53,7 +53,7 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
      */
     function initialize(address anOwner, address oracleAdaptor_) public virtual initializer {
         _oracleAdaptor = IOracleAdaptor(oracleAdaptor_);
-        _tipJar = new Jar(payable(address(this)));
+        _jar = new Jar(payable(address(this)));
         _initialize(anOwner);
     }
 
@@ -115,8 +115,7 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
         if (tipInUSD > 0) {
             uint256 tipInWei = (tipInUSD * 1e18) / ethPriceUSD;
 
-            (bool tipSent,) = address(_tipJar).call{value: tipInWei}("");
-            require(tipSent, "Failed to send tip");
+            _jar.deposit{value: tipInWei}(gasUsed, tipInUSD);
         }
     }
 

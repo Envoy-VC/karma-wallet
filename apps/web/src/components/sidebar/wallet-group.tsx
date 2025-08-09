@@ -36,7 +36,7 @@ export const WalletGroup = () => {
               <SidebarMenuButton asChild={true} size="lg" tooltip={item.title}>
                 <Link
                   activeOptions={{
-                    exact: true,
+                    exact: item.id === "goals",
                     includeHash: true,
                     includeSearch: true,
                   }}

@@ -20,9 +20,9 @@ function RouteComponent() {
             animate={{ opacity: 1, y: 0 }}
             className="h-screen p-6"
             exit={{ opacity: 1 }}
-            initial={{ opacity: 0.5, y: -20 }}
+            initial={{ opacity: 0, y: -20 }}
             key={pathname}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ type: "tween" }}
           >
             <Outlet />
           </motion.div>

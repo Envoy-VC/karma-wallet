@@ -58,7 +58,7 @@ contract CounterUnitTest is Test, SetUp {
         console.log("Owner Address", owner);
         console.log("Smart Account Address", address(account));
 
-        uint256 tipJarBalance = address(account._tipJar()).balance;
+        uint256 tipJarBalance = address(account._jar()).balance;
         console.log("Tip Jar Balance Before Execution", ethToUsd(tipJarBalance));
 
         vm.deal(address(account), 100 ether);
@@ -77,8 +77,44 @@ contract CounterUnitTest is Test, SetUp {
 
         console.log("Gas Cost in USD", parseDecimal(gasCostInUSD, 18, 4));
 
-        tipJarBalance = address(account._tipJar()).balance;
+        tipJarBalance = address(account._jar()).balance;
         console.log("Tip Received", ethToUsd(tipJarBalance));
+
+        assert(tipJarBalance > 0);
+        vm.stopBroadcast();
+    }
+
+    function test_Withdraw() public {
+        address senderCreator = address(entryPoint.senderCreator());
+        vm.deal(senderCreator, 1 ether);
+
+        address owner = accounts.richard.addr;
+
+        vm.startBroadcast(senderCreator);
+        KarmaAccount account = factory.createAccount(owner, block.timestamp);
+        vm.stopBroadcast();
+
+        vm.startBroadcast(owner);
+        vm.deal(address(account), 100 ether);
+
+        bytes memory data = bytes("0x");
+        vm.txGasPrice(2 * 1e8);
+        account.execute(accounts.gilfoyle.addr, 1 ether, data);
+
+        uint256 tipJarBalance = address(account._jar()).balance;
+
+        uint256 richardBalancePre = accounts.richard.addr.balance;
+
+        bytes memory withdrawData =
+            abi.encodeWithSignature("withdraw(uint256,address)", tipJarBalance, accounts.richard.addr);
+
+        account.execute(address(account._jar()), 0, withdrawData);
+
+        uint256 richardBalancePost = accounts.richard.addr.balance;
+        uint256 deposit = richardBalancePost - richardBalancePre;
+
+        assertEq(tipJarBalance, deposit);
+
         vm.stopBroadcast();
     }
 }
