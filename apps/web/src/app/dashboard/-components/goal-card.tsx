@@ -46,10 +46,10 @@ export const GoalCard = () => {
         <div className="text-3xl">😍</div>
         <div className="flex flex-col">
           <div className="font-medium text-lg">Flowers</div>
-          <div className="text-neutral-400 text-sm">$2 of $5</div>
+          <div className="text-neutral-500 text-sm">$2 of $5</div>
         </div>
       </div>
-      <div className="space-y-2 pt-4 font-medium">
+      <div className="space-y-2 pt-4 font-medium text-neutral-600">
         <div className="flex justify-between text-sm">
           <span>Progress</span>
           <span>{Math.round(progress)}%</span>

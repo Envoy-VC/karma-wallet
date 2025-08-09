@@ -36,7 +36,8 @@ export const WalletGroup = () => {
               <SidebarMenuButton asChild={true} size="lg" tooltip={item.title}>
                 <Link
                   activeOptions={{
-                    exact: item.id === "goals",
+                    // biome-ignore lint/complexity/noUselessTernary: safe
+                    exact: item.id === "goals" ? false : true,
                     includeHash: true,
                     includeSearch: true,
                   }}
