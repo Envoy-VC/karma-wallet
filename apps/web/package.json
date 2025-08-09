@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
     "@karma-wallet/ui": "workspace:*",
     "@reown/appkit": "^1.7.18",
     "@reown/appkit-adapter-wagmi": "^1.7.18",
@@ -11,11 +12,13 @@
     "@wagmi/core": "^2.18.1",
     "@walletconnect/core": "^2.21.6",
     "@walletconnect/utils": "^2.21.6",
+    "frimousse": "^0.3.0",
     "lucide-react": "^0.536.0",
     "motion": "^12.23.12",
     "permissionless": "^0.2.52",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-hook-form": "^7.62.0",
     "usehooks-ts": "^3.1.1",
     "viem": "^2.33.2",
     "wagmi": "^2.16.1",

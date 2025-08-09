@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from "./app/__root";
 import { Route as CreateRouteImport } from "./app/create";
-import { Route as DashboardGoalsRouteImport } from "./app/dashboard/goals";
+import { Route as DashboardGoalsIndexRouteImport } from "./app/dashboard/goals/index";
 import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
 import { Route as DashboardSavingsRouteImport } from "./app/dashboard/savings";
 import { Route as DashboardSendIndexRouteImport } from "./app/dashboard/send/index";
@@ -48,15 +48,15 @@ const DashboardSavingsRoute = DashboardSavingsRouteImport.update({
   id: "/savings",
   path: "/savings",
 } as any);
-const DashboardGoalsRoute = DashboardGoalsRouteImport.update({
-  getParentRoute: () => DashboardRouteRoute,
-  id: "/goals",
-  path: "/goals",
-} as any);
 const DashboardSendIndexRoute = DashboardSendIndexRouteImport.update({
   getParentRoute: () => DashboardRouteRoute,
   id: "/send/",
   path: "/send/",
+} as any);
+const DashboardGoalsIndexRoute = DashboardGoalsIndexRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/goals/",
+  path: "/goals/",
 } as any);
 
 export interface FileRoutesByFullPath {
@@ -64,9 +64,9 @@ export interface FileRoutesByFullPath {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
-  "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/goals": typeof DashboardGoalsIndexRoute;
   "/dashboard/send": typeof DashboardSendIndexRoute;
 }
 export interface FileRoutesByTo {
@@ -74,9 +74,9 @@ export interface FileRoutesByTo {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
-  "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/goals": typeof DashboardGoalsIndexRoute;
   "/dashboard/send": typeof DashboardSendIndexRoute;
 }
 export interface FileRoutesById {
@@ -85,9 +85,9 @@ export interface FileRoutesById {
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
   "/wc": typeof WcRoute;
-  "/dashboard/goals": typeof DashboardGoalsRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/goals/": typeof DashboardGoalsIndexRoute;
   "/dashboard/send/": typeof DashboardSendIndexRoute;
 }
 export interface FileRouteTypes {
@@ -97,9 +97,9 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/create"
     | "/wc"
-    | "/dashboard/goals"
     | "/dashboard/savings"
     | "/dashboard/settings"
+    | "/dashboard/goals"
     | "/dashboard/send";
   fileRoutesByTo: FileRoutesByTo;
   to:
@@ -107,9 +107,9 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/create"
     | "/wc"
-    | "/dashboard/goals"
     | "/dashboard/savings"
     | "/dashboard/settings"
+    | "/dashboard/goals"
     | "/dashboard/send";
   id:
     | "__root__"
@@ -117,9 +117,9 @@ export interface FileRouteTypes {
     | "/dashboard"
     | "/create"
     | "/wc"
-    | "/dashboard/goals"
     | "/dashboard/savings"
     | "/dashboard/settings"
+    | "/dashboard/goals/"
     | "/dashboard/send/";
   fileRoutesById: FileRoutesById;
 }
@@ -174,13 +174,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSavingsRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
-    "/dashboard/goals": {
-      id: "/dashboard/goals";
-      path: "/goals";
-      fullPath: "/dashboard/goals";
-      preLoaderRoute: typeof DashboardGoalsRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
     "/dashboard/send/": {
       id: "/dashboard/send/";
       path: "/send";
@@ -188,18 +181,25 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSendIndexRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
+    "/dashboard/goals/": {
+      id: "/dashboard/goals/";
+      path: "/goals";
+      fullPath: "/dashboard/goals";
+      preLoaderRoute: typeof DashboardGoalsIndexRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
   }
 }
 
 interface DashboardRouteRouteChildren {
-  DashboardGoalsRoute: typeof DashboardGoalsRoute;
   DashboardSavingsRoute: typeof DashboardSavingsRoute;
   DashboardSettingsRoute: typeof DashboardSettingsRoute;
+  DashboardGoalsIndexRoute: typeof DashboardGoalsIndexRoute;
   DashboardSendIndexRoute: typeof DashboardSendIndexRoute;
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardGoalsRoute: DashboardGoalsRoute,
+  DashboardGoalsIndexRoute: DashboardGoalsIndexRoute,
   DashboardSavingsRoute: DashboardSavingsRoute,
   DashboardSendIndexRoute: DashboardSendIndexRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
