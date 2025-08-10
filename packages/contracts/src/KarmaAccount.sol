@@ -1,26 +1,27 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.28;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.23;
+
+/* solhint-disable avoid-low-level-calls */
+/* solhint-disable no-inline-assembly */
+/* solhint-disable reason-string */
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 import "@eth-infinitism/account-abstraction/contracts/core/BaseAccount.sol";
-
 import "@eth-infinitism/account-abstraction/contracts/core/Helpers.sol";
-import "@eth-infinitism/account-abstraction/contracts/accounts/callback/TokenCallbackHandler.sol";
+import "@eth-infinitism/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol";
 
+import {Jar} from "src/Jar.sol";
 import {IOracleAdaptor} from "./interfaces/IOracleAdaptor.sol";
-
-import {Jar} from "./Jar.sol";
 
 contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Initializable {
     address public owner;
 
     IEntryPoint private immutable _entryPoint;
-    IOracleAdaptor public _oracleAdaptor;
-
     Jar public _jar;
+    IOracleAdaptor public _oracleAdaptor;
 
     event KarmaAccountInitialized(IEntryPoint indexed entryPoint, address indexed owner);
 
@@ -34,67 +35,35 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
         return _entryPoint;
     }
 
+    // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    constructor(IEntryPoint entryPoint_) {
-        _entryPoint = entryPoint_;
+    constructor(IEntryPoint anEntryPoint) {
+        _entryPoint = anEntryPoint;
         _disableInitializers();
     }
 
     function _onlyOwner() internal view {
+        //directly from EOA owner, or through the account itself (which gets redirected through execute())
         require(msg.sender == owner || msg.sender == address(this), "only owner");
     }
 
     /**
-     * @dev The _entryPoint member is immutable, to reduce gas consumption.  To upgrade EntryPoint,
-     * a new implementation of SimpleAccount must be deployed with the new EntryPoint address, then upgrading
-     * the implementation by calling `upgradeTo()`
-     * @param anOwner the owner (signer) of this account
+     * execute a transaction (called directly from owner, or by entryPoint)
+     * @param dest destination address to call
+     * @param value the value to pass in this call
+     * @param func the calldata to pass in this call
      */
-    function initialize(address anOwner, address oracleAdaptor_) public virtual initializer {
-        _oracleAdaptor = IOracleAdaptor(oracleAdaptor_);
-        _jar = new Jar(payable(address(this)));
-        _initialize(anOwner);
-    }
-
-    function _initialize(address anOwner) internal virtual {
-        owner = anOwner;
-        emit KarmaAccountInitialized(_entryPoint, owner);
-    }
-
-    // Require the function call went through EntryPoint or owner
-    function _requireForExecute() internal view virtual override {
-        require(msg.sender == address(entryPoint()) || msg.sender == owner, "account: not Owner or EntryPoint");
-    }
-
-    /// implement template method of BaseAccount
-    function _validateSignature(PackedUserOperation calldata userOp, bytes32 userOpHash)
-        internal
-        virtual
-        override
-        returns (uint256 validationData)
-    {
-        // UserOpHash can be generated using eth_signTypedData_v4
-        if (owner != ECDSA.recover(userOpHash, userOp.signature)) {
-            return SIG_VALIDATION_FAILED;
-        }
-        return SIG_VALIDATION_SUCCESS;
-    }
-
-    function execute(address target, uint256 value, bytes calldata data) external override {
-        // _requireForExecute();
+    function execute(address dest, uint256 value, bytes calldata func) external {
+        _requireFromEntryPointOrOwner();
 
         uint256 gasPre = gasleft();
-        bool ok = Exec.call(target, value, data, gasPre);
+        _call(dest, value, func);
         uint256 gasPost = gasleft();
 
         uint256 gasUsed = gasPre - gasPost;
 
         _executeTipJarLogic(gasUsed);
-
-        if (!ok) {
-            Exec.revertWithReturnData();
-        }
     }
 
     function _executeTipJarLogic(uint256 gasUsed) internal {
@@ -116,6 +85,72 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
             uint256 tipInWei = (tipInUSD * 1e18) / ethPriceUSD;
 
             _jar.deposit{value: tipInWei}(gasUsed, tipInUSD);
+        }
+    }
+
+    /**
+     * execute a sequence of transactions
+     * @dev to reduce gas consumption for trivial case (no value), use a zero-length array to mean zero value
+     * @param dest an array of destination addresses
+     * @param value an array of values to pass to each call. can be zero-length for no-value calls
+     * @param func an array of calldata to pass to each call
+     */
+    function executeBatch(address[] calldata dest, uint256[] calldata value, bytes[] calldata func) external {
+        _requireFromEntryPointOrOwner();
+        require(dest.length == func.length && (value.length == 0 || value.length == func.length), "wrong array lengths");
+        if (value.length == 0) {
+            for (uint256 i = 0; i < dest.length; i++) {
+                _call(dest[i], 0, func[i]);
+            }
+        } else {
+            for (uint256 i = 0; i < dest.length; i++) {
+                _call(dest[i], value[i], func[i]);
+            }
+        }
+    }
+
+    /**
+     * @dev The _entryPoint member is immutable, to reduce gas consumption.  To upgrade EntryPoint,
+     * a new implementation of SimpleAccount must be deployed with the new EntryPoint address, then upgrading
+     * the implementation by calling `upgradeTo()`
+     * @param anOwner the owner (signer) of this account
+     */
+    function initialize(address anOwner, address oracleAdaptor_) public virtual initializer {
+        _initialize(anOwner, oracleAdaptor_);
+    }
+
+    function _initialize(address anOwner, address oracleAdaptor_) internal virtual {
+        _oracleAdaptor = IOracleAdaptor(oracleAdaptor_);
+        _jar = new Jar(payable(address(this)));
+        owner = anOwner;
+        emit KarmaAccountInitialized(_entryPoint, owner);
+    }
+
+    // Require the function call went through EntryPoint or owner
+    function _requireFromEntryPointOrOwner() internal view {
+        require(msg.sender == address(entryPoint()) || msg.sender == owner, "account: not Owner or EntryPoint");
+    }
+
+    /// implement template method of BaseAccount
+    function _validateSignature(PackedUserOperation calldata userOp, bytes32 userOpHash)
+        internal
+        virtual
+        override
+        returns (uint256 validationData)
+    {
+        bytes32 hash = MessageHashUtils.toEthSignedMessageHash(userOpHash);
+        if (owner != ECDSA.recover(hash, userOp.signature)) {
+            return SIG_VALIDATION_FAILED;
+        }
+        return SIG_VALIDATION_SUCCESS;
+    }
+
+    function _call(address target, uint256 value, bytes memory data) internal {
+        (bool success, bytes memory result) = target.call{value: value}(data);
+        if (!success) {
+            assembly {
+                revert(add(result, 32), mload(result))
+            }
         }
     }
 

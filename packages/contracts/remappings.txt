@@ -1,4 +1,4 @@
-@eth-infinitism/account-abstraction/=dependencies/eth-infinitism-account-abstraction-0.8.0/
+@eth-infinitism/account-abstraction/=dependencies/eth-infinitism-account-abstraction-0.7/
 @openzeppelin/contracts/=dependencies/@openzeppelin-contracts-5.4.0/
 @pythnetwork/pyth-sdk-solidity/=dependencies/@pythnetwork-pyth-sdk-solidity-4.2.0/
 forge-std/=dependencies/forge-std-1.9.7/src/

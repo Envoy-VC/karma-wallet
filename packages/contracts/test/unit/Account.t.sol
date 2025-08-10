@@ -45,16 +45,10 @@ contract CounterUnitTest is Test, SetUp {
     }
 
     function test_Execute() public {
-        address senderCreator = address(entryPoint.senderCreator());
-        vm.deal(senderCreator, 1 ether);
-
         address owner = accounts.richard.addr;
 
-        vm.startBroadcast(senderCreator);
-        KarmaAccount account = factory.createAccount(owner, block.timestamp);
-        vm.stopBroadcast();
-
         vm.startBroadcast(owner);
+        KarmaAccount account = factory.createAccount(owner, block.timestamp);
         console.log("Owner Address", owner);
         console.log("Smart Account Address", address(account));
 
@@ -85,16 +79,10 @@ contract CounterUnitTest is Test, SetUp {
     }
 
     function test_Withdraw() public {
-        address senderCreator = address(entryPoint.senderCreator());
-        vm.deal(senderCreator, 1 ether);
-
         address owner = accounts.richard.addr;
 
-        vm.startBroadcast(senderCreator);
-        KarmaAccount account = factory.createAccount(owner, block.timestamp);
-        vm.stopBroadcast();
-
         vm.startBroadcast(owner);
+        KarmaAccount account = factory.createAccount(owner, block.timestamp);
         vm.deal(address(account), 100 ether);
 
         bytes memory data = bytes("0x");

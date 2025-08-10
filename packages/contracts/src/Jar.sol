@@ -2,7 +2,7 @@
 pragma solidity ^0.8.28;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import "@eth-infinitism/account-abstraction/contracts/accounts/callback/TokenCallbackHandler.sol";
+import "@eth-infinitism/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol";
 import {KarmaAccount} from "src/KarmaAccount.sol";
 
 contract Jar is TokenCallbackHandler {
