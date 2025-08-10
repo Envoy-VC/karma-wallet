@@ -265,6 +265,7 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       onClick={(event: unknown) => {
+        // @ts-ignore safe to assume event is MouseEvent
         onClick?.(event);
         toggleSidebar();
       }}

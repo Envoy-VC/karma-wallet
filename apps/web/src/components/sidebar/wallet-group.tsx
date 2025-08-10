@@ -5,17 +5,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@karma-wallet/ui/components/sidebar";
+import { SendIcon } from "@karma-wallet/ui/icons";
 import { cn } from "@karma-wallet/ui/lib/utils";
 import { Link } from "@tanstack/react-router";
-import { PiggyBankIcon, TargetIcon } from "lucide-react";
+import { TargetIcon } from "lucide-react";
 import { motion } from "motion/react";
 
 const walletGroupItems = [
   {
-    href: "/dashboard/savings",
-    icon: PiggyBankIcon,
-    id: "savings",
-    title: "Savings",
+    href: "/dashboard/send",
+    icon: SendIcon,
+    id: "send-swap",
+    title: "Send Crypto",
   },
   {
     href: "/dashboard/goals",

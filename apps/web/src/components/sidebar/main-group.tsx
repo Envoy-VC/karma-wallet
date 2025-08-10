@@ -6,7 +6,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@karma-wallet/ui/components/sidebar";
-import { DashboardIcon, SendIcon } from "@karma-wallet/ui/icons";
+import { DashboardIcon } from "@karma-wallet/ui/icons";
 import { cn } from "@karma-wallet/ui/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
@@ -17,12 +17,6 @@ const mainGroupItems = [
     icon: DashboardIcon,
     id: "dashboard",
     title: "Dashboard",
-  },
-  {
-    href: "/dashboard/send",
-    icon: SendIcon,
-    id: "send-swap",
-    title: "Send & Swap",
   },
 ];
 

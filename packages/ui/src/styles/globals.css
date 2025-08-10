@@ -66,6 +66,9 @@
   --sidebar-accent-foreground: #18181b;
   --sidebar-border: #e5e7eb;
   --sidebar-ring: #3b82f6;
+
+  --chart-1: #04b4bb60;
+  --chart-2: #04b4bb20;
 }
 
 @theme inline {
