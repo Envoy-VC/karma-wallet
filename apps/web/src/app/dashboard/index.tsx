@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FuelIcon, HandCoinsIcon } from "lucide-react";
 
-import { DashboardCard, WeeklySavingsChart } from "./-components";
+import { DashboardCard, SavingsTable, WeeklySavingsChart } from "./-components";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardPage,
@@ -42,9 +42,8 @@ function DashboardPage() {
           value="$12.87"
         />
       </div>
-      <div className="h-[24rem]">
-        <WeeklySavingsChart />
-      </div>
+      <WeeklySavingsChart />
+      <SavingsTable />
     </div>
   );
 }
