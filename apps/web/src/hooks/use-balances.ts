@@ -1,14 +1,17 @@
 import { useMemo } from "react";
 
 import { erc20Abi, zeroAddress } from "viem";
-import { useAccount, useBalance, useReadContracts } from "wagmi";
+import { useBalance, useReadContracts } from "wagmi";
 
-import { TokenAddress } from "@/data/address";
+import { PYTH_ADAPTOR_ABI } from "@/data/abi";
+import { ContractAddress, TokenAddress } from "@/data/address";
+
+import { useSmartAccount } from "./use-account";
 
 export const useBalances = () => {
-  const { address } = useAccount();
+  const { address } = useSmartAccount();
   const { data: balance } = useBalance({
-    address,
+    address: address ?? undefined,
     query: { enabled: address !== undefined },
   });
 
@@ -50,6 +53,12 @@ export const useBalances = () => {
         args: [],
         functionName: "decimals",
       },
+      {
+        abi: PYTH_ADAPTOR_ABI,
+        address: ContractAddress.pythAdaptor,
+        args: [],
+        functionName: "getLatestEthPriceInUsd",
+      },
     ],
     query: {
       enabled: address !== undefined,
@@ -66,6 +75,8 @@ export const useBalances = () => {
     const usdcDecimals = tokenBalances?.[4].result ?? 18;
     const usdtDecimals = tokenBalances?.[5].result ?? 18;
 
+    const ethPrice = Number(tokenBalances?.[6].result ?? 0) / 10 ** 18;
+
     return {
       dai: {
         decimals: daiDecimals,
@@ -79,6 +90,7 @@ export const useBalances = () => {
         symbol: "ETH",
         value: ethBalance,
       },
+      ethPrice,
       usdc: {
         decimals: usdcDecimals,
         formatted: (Number(usdcBalance) / 10 ** usdcDecimals).toFixed(2),

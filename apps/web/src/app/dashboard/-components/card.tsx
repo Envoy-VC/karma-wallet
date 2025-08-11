@@ -35,8 +35,8 @@ export const DashboardCard = ({
       >
         <IconComp className="size-5 text-neutral-600" />
       </div>
-      <div className="font-medium text-lg text-neutral-700">{title}</div>
-      <div className="font-medium text-5xl">{value}</div>
+      <div className="font-normal text-lg text-neutral-700">{title}</div>
+      <div className="font-medium text-4xl">{value}</div>
       <div className="flex flex-row items-center gap-2">
         <div className="text-neutral-400">{subtitle.text}</div>
         <div

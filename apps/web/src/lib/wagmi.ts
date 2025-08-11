@@ -4,17 +4,19 @@ import { createPimlicoClient } from "permissionless/clients/pimlico";
 import { createPublicClient } from "viem";
 import { entryPoint07Address } from "viem/account-abstraction";
 import { http } from "wagmi";
-import { type Chain, morphHolesky } from "wagmi/chains";
+import { type Chain, foundry } from "wagmi/chains";
 
 import { env } from "@/env";
 
 const projectId = env.VITE_REOWN_PROJECT_ID;
 const bundlerUrl = env.VITE_BUNDLER_URL;
 
-const networks = [morphHolesky] as [Chain];
+export const chain = foundry;
+
+const networks = [chain] as [Chain];
 
 export const publicClient = createPublicClient({
-  chain: morphHolesky,
+  chain: chain,
   transport: http(),
 });
 

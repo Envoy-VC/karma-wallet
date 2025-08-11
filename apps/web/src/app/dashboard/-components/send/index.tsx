@@ -5,6 +5,7 @@ import { ArrowDownIcon } from "lucide-react";
 import { useSend } from "@/hooks";
 
 import { SelectToken } from "./select-token";
+import { SendButton } from "./send-button";
 
 export const SendContainer = () => {
   const {
@@ -15,7 +16,6 @@ export const SendContainer = () => {
     amountInUsd,
     currentTokenBalance,
     onMax,
-    buttonStatus,
   } = useSend();
 
   return (
@@ -63,9 +63,7 @@ export const SendContainer = () => {
           />
         </div>
       </div>
-      <Button className="w-full" disabled={buttonStatus !== undefined}>
-        {buttonStatus ?? "Send"}
-      </Button>
+      <SendButton />
     </div>
   );
 };

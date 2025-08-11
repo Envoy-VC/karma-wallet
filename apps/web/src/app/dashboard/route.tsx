@@ -1,10 +1,21 @@
 import { SidebarProvider } from "@karma-wallet/ui/components/sidebar";
-import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useLocation,
+} from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 
 import { MobileSidebar, Sidebar } from "@/components";
 
 export const Route = createFileRoute("/dashboard")({
+  beforeLoad: () => {
+    const account = localStorage.getItem("karmaAccount");
+    if (!account) {
+      throw redirect({ to: "/create" });
+    }
+  },
   component: RouteComponent,
 });
 

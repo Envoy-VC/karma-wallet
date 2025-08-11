@@ -10,7 +10,17 @@ export const Route = createFileRoute("/dashboard/")({
 function DashboardPage() {
   return (
     <div className="mx-auto h-full max-w-screen-xl space-y-4 px-2 py-4 md:py-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <DashboardCard
+          color="#7DD3FC"
+          icon={HandCoinsIcon}
+          subtitle={{
+            text: "Since last week",
+            value: 1.65,
+          }}
+          title="Total Savings"
+          value="$12.87"
+        />
         <DashboardCard
           color="#7DD3FC"
           icon={HandCoinsIcon}

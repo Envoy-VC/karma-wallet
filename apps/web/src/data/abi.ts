@@ -3,7 +3,7 @@ export const KARMA_ACCOUNT_ABI = [
     inputs: [
       {
         internalType: "contract IEntryPoint",
-        name: "entryPoint_",
+        name: "anEntryPoint",
         type: "address",
       },
     ],
@@ -20,17 +20,17 @@ export const KARMA_ACCOUNT_ABI = [
   },
   {
     inputs: [],
-    name: "_oracleAdaptor",
-    outputs: [
-      { internalType: "contract IOracleAdaptor", name: "", type: "address" },
-    ],
+    name: "_jar",
+    outputs: [{ internalType: "contract Jar", name: "", type: "address" }],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
-    name: "_tipJar",
-    outputs: [{ internalType: "contract Jar", name: "", type: "address" }],
+    name: "_oracleAdaptor",
+    outputs: [
+      { internalType: "contract IOracleAdaptor", name: "", type: "address" },
+    ],
     stateMutability: "view",
     type: "function",
   },
@@ -52,9 +52,9 @@ export const KARMA_ACCOUNT_ABI = [
   },
   {
     inputs: [
-      { internalType: "address", name: "target", type: "address" },
+      { internalType: "address", name: "dest", type: "address" },
       { internalType: "uint256", name: "value", type: "uint256" },
-      { internalType: "bytes", name: "data", type: "bytes" },
+      { internalType: "bytes", name: "func", type: "bytes" },
     ],
     name: "execute",
     outputs: [],
@@ -63,16 +63,9 @@ export const KARMA_ACCOUNT_ABI = [
   },
   {
     inputs: [
-      {
-        components: [
-          { internalType: "address", name: "target", type: "address" },
-          { internalType: "uint256", name: "value", type: "uint256" },
-          { internalType: "bytes", name: "data", type: "bytes" },
-        ],
-        internalType: "struct BaseAccount.Call[]",
-        name: "calls",
-        type: "tuple[]",
-      },
+      { internalType: "address[]", name: "dest", type: "address[]" },
+      { internalType: "uint256[]", name: "value", type: "uint256[]" },
+      { internalType: "bytes[]", name: "func", type: "bytes[]" },
     ],
     name: "executeBatch",
     outputs: [],
@@ -291,14 +284,6 @@ export const KARMA_ACCOUNT_ABI = [
     type: "error",
   },
   { inputs: [], name: "ERC1967NonPayable", type: "error" },
-  {
-    inputs: [
-      { internalType: "uint256", name: "index", type: "uint256" },
-      { internalType: "bytes", name: "error", type: "bytes" },
-    ],
-    name: "ExecuteError",
-    type: "error",
-  },
   { inputs: [], name: "FailedCall", type: "error" },
   { inputs: [], name: "InvalidInitialization", type: "error" },
   { inputs: [], name: "NotInitializing", type: "error" },
@@ -308,4 +293,228 @@ export const KARMA_ACCOUNT_ABI = [
     name: "UUPSUnsupportedProxiableUUID",
     type: "error",
   },
+] as const;
+
+export const PYTH_ADAPTOR_ABI = [
+  {
+    inputs: [
+      { internalType: "address", name: "initialOwner", type: "address" },
+      { internalType: "bytes32", name: "priceId_", type: "bytes32" },
+      { internalType: "address", name: "pythAddress_", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "_priceId",
+    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "_pyth",
+    outputs: [{ internalType: "contract IPyth", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getLatestEthPriceInUsd",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "priceId_", type: "bytes32" }],
+    name: "updatePriceId",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "pythAddress_", type: "address" },
+    ],
+    name: "updatePythAddress",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+    name: "OwnableInvalidOwner",
+    type: "error",
+  },
+  {
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+    type: "error",
+  },
+] as const;
+
+export const JAR_ABI = [
+  {
+    inputs: [
+      { internalType: "address payable", name: "account_", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  { stateMutability: "payable", type: "fallback" },
+  { stateMutability: "payable", type: "receive" },
+  {
+    inputs: [],
+    name: "_account",
+    outputs: [
+      { internalType: "contract KarmaAccount", name: "", type: "address" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256[]", name: "", type: "uint256[]" },
+      { internalType: "uint256[]", name: "", type: "uint256[]" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC1155BatchReceived",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC1155Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "bytes", name: "", type: "bytes" },
+    ],
+    name: "onERC721Received",
+    outputs: [{ internalType: "bytes4", name: "", type: "bytes4" }],
+    stateMutability: "pure",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
+    name: "supportsInterface",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "address", name: "recipient", type: "address" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "totalGasSpent",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "totalTip",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "Deposit",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "from", type: "address" },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      { indexed: false, internalType: "string", name: "via", type: "string" },
+    ],
+    name: "ReceivedETH",
+    type: "event",
+  },
+  { inputs: [], name: "FailedToSendEther", type: "error" },
+  { inputs: [], name: "InsufficientBalance", type: "error" },
+  { inputs: [], name: "OnlySmartAccountOwner", type: "error" },
 ] as const;

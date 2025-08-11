@@ -7,7 +7,6 @@ import { type TokenType, useSendStore } from "@/lib/stores";
 import { useBalances } from "./use-balances";
 
 export const useSend = () => {
-  const ethPrice = 4000;
   const balances = useBalances();
   const {
     token,
@@ -20,6 +19,8 @@ export const useSend = () => {
     setToken,
     checklist,
     setChecklistOption,
+    sendingState,
+    setSendingState,
   } = useSendStore();
 
   const onTokenChange = (token: TokenType) => {
@@ -34,7 +35,6 @@ export const useSend = () => {
     }
 
     const tokenBalance = balances[token];
-    console.log(amount);
     const isAvailable =
       balances[token].value >= BigInt(amount * 10 ** tokenBalance.decimals);
 
@@ -50,7 +50,7 @@ export const useSend = () => {
 
   const calculateAmountInUsd = (amount: number, token: TokenType) => {
     if (token === "eth") {
-      return amount * ethPrice;
+      return amount * balances.ethPrice;
     }
     return amount;
   };
@@ -107,6 +107,8 @@ export const useSend = () => {
     onReceiverChange,
     onTokenChange,
     receiver,
+    sendingState,
+    setSendingState,
     token,
   };
 };

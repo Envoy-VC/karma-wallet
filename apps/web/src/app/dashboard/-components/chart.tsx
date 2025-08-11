@@ -48,8 +48,8 @@ export const WeeklySavingsChart = () => {
       <CardContent>
         <ChartContainer className="max-h-[20rem] w-full" config={chartConfig}>
           <BarChart
-            accessibilityLayer={true}
-            className="flex min-w-full items-center justify-center"
+            // accessibilityLayer={true}
+            className="flex w-full items-center justify-center"
             data={chartData}
           >
             <XAxis
@@ -67,7 +67,6 @@ export const WeeklySavingsChart = () => {
               axisLine={true}
               className="hidden md:block"
               dataKey="total"
-              label="Total"
               tickFormatter={(value) => {
                 return `$${value.toLocaleString()}`;
               }}

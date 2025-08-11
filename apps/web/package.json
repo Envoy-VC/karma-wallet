@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@biconomy/abstractjs": "^1.0.22",
     "@hookform/resolvers": "^5.2.1",
     "@karma-wallet/ui": "workspace:*",
     "@reown/appkit": "^1.7.18",

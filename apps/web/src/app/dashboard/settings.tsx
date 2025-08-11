@@ -4,6 +4,7 @@ import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
 
+import { useSmartAccount } from "@/hooks";
 import { truncateEthAddress } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard/settings")({
@@ -12,23 +13,23 @@ export const Route = createFileRoute("/dashboard/settings")({
 
 function RouteComponent() {
   const { address } = useAccount();
+  const { address: karmaAddress } = useSmartAccount();
   return (
     <div className="mx-auto h-full max-w-screen-lg py-8">
       <div className="font-medium text-3xl">Settings</div>
       <div className="space-y-1 py-12">
         <div className="flex w-full flex-row items-center justify-between font-medium">
           <div className="text-lg">Account Address</div>
-
           <Button
             className="h-8 rounded-full text-neutral-500"
             onClick={async () => {
-              await navigator.clipboard.writeText(address ?? "");
+              await navigator.clipboard.writeText(karmaAddress ?? "");
               toast.success("Copied to clipboard");
             }}
             variant="outline"
           >
             <div className="flex flex-row items-center gap-2">
-              <div>{truncateEthAddress(address)}</div>
+              <div>{truncateEthAddress(karmaAddress ?? "")}</div>
               <CopyIcon className="size-5 cursor-pointer text-neutral-500" />
             </div>
           </Button>

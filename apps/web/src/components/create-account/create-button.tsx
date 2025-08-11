@@ -2,16 +2,26 @@ import { useMemo, useState } from "react";
 
 import { Button } from "@karma-wallet/ui/components/button";
 import { PlusIcon } from "@karma-wallet/ui/icons";
+import { useNavigate } from "@tanstack/react-router";
 import { CircleCheckIcon, Loader2Icon, XCircleIcon } from "lucide-react";
 import { toSimpleSmartAccount } from "permissionless/accounts";
+import { useLocalStorage } from "usehooks-ts";
 import { entryPoint07Address } from "viem/account-abstraction";
 import { usePublicClient, useWalletClient } from "wagmi";
 
+import { ContractAddress } from "@/data/address";
 import { sleep } from "@/lib/utils";
 
 export const CreateAccountButton = () => {
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
+
+  const navigate = useNavigate();
+
+  const [karmaAddress, setKarmaAddress] = useLocalStorage<string | null>(
+    "karmaAccount",
+    null,
+  );
 
   const [creatingState, setCreatingState] = useState<
     "idle" | "creating" | "created" | "error"
@@ -23,21 +33,28 @@ export const CreateAccountButton = () => {
       if (!(publicClient && walletClient)) {
         throw new Error("Wallet not connected");
       }
-      const simpleSmartAccount = await toSimpleSmartAccount({
+      if (karmaAddress) {
+        throw new Error("Account already created");
+      }
+      const karmaAccount = await toSimpleSmartAccount({
         client: publicClient,
         entryPoint: {
           address: entryPoint07Address,
           version: "0.7",
         },
+        factoryAddress: ContractAddress.karamaccountFactory,
         owner: walletClient,
       });
 
-      console.log("Smart Account: ", simpleSmartAccount);
+      setKarmaAddress(karmaAccount.address);
       setCreatingState("created");
+      await sleep("2s");
+      setCreatingState("idle");
+
+      navigate({ to: "/dashboard" });
     } catch (error: unknown) {
       setCreatingState("error");
       console.error(error);
-    } finally {
       await sleep("2s");
       setCreatingState("idle");
     }
