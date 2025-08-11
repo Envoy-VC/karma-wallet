@@ -5,104 +5,88 @@ import {Test} from "forge-std/Test.sol";
 
 import {console2 as console} from "forge-std/console2.sol";
 import {KarmaAccount} from "src/KarmaAccount.sol";
+import {Jar} from "src/Jar.sol";
 
 import {SetUp} from "test/common/SetUp.sol";
 
+import {Logging} from "test/helpers/Logging.sol";
+
 contract CounterUnitTest is Test, SetUp {
+    using Logging for *;
+
     function setUp() public override {
         super.setUp();
     }
 
-    function parseDecimal(uint256 number, uint8 numberDecimals, uint8 printDecimals)
-        internal
-        pure
-        returns (string memory)
-    {
-        uint256 base = 10 ** numberDecimals;
-        uint256 integerPart = number / base;
-
-        // Scale the fractional part to printDecimals
-        uint256 fracFull = number % base;
-        uint256 fracScaled = (fracFull * (10 ** printDecimals)) / base;
-
-        string memory paddedFraction = padFraction(fracScaled, printDecimals);
-        string memory formatted = string(abi.encodePacked(vm.toString(integerPart), ".", paddedFraction));
-        return formatted;
-    }
-
-    function padFraction(uint256 frac, uint8 decimals) internal pure returns (string memory) {
-        string memory padded = vm.toString(frac);
-        while (bytes(padded).length < decimals) {
-            padded = string(abi.encodePacked("0", padded));
-        }
-        return padded;
-    }
-
-    function ethToUsd(uint256 _eth) internal pure returns (string memory) {
-        uint256 ethPrice = 3000 * 1e18;
+    function ethToUsd(uint256 _eth) internal view returns (string memory) {
+        uint256 ethPrice = oracle.getLatestEthPriceInUsd();
         uint256 usdPrice = (_eth * ethPrice) / 1e18;
-        return parseDecimal(usdPrice, 18, 4);
+        return Logging.parseDecimal(usdPrice, 18, 4);
+    }
+
+    function _createAccount(address owner) internal returns (KarmaAccount) {
+        vm.startBroadcast(owner);
+        KarmaAccount account = factory.createAccount(owner, block.timestamp);
+        vm.stopBroadcast();
+        vm.deal(address(account), 100 ether);
+        return account;
     }
 
     function test_Execute() public {
-        address owner = accounts.richard.addr;
+        address owner = accounts.owner.addr;
+
+        KarmaAccount account = _createAccount(owner);
 
         vm.startBroadcast(owner);
-        KarmaAccount account = factory.createAccount(owner, block.timestamp);
-        console.log("Owner Address", owner);
-        console.log("Smart Account Address", address(account));
 
         uint256 tipJarBalance = address(account._jar()).balance;
-        console.log("Tip Jar Balance Before Execution", ethToUsd(tipJarBalance));
-
-        vm.deal(address(account), 100 ether);
 
         bytes memory data = bytes("0x");
         vm.txGasPrice(2 * 1e8);
         uint256 gasPre = gasleft();
-        account.execute(accounts.gilfoyle.addr, 1 ether, data);
+
+        // Testing Event Emit
+        vm.expectEmit(true, false, false, true);
+        emit Jar.Deposit(address(account), 34723, 3055400000000, 1);
+
+        account.execute(accounts.user.addr, 1 ether, data);
         uint256 gasPost = gasleft();
         uint256 gasUsed = gasPre - gasPost;
 
-        uint256 ethPriceUSD = oracle.getLatestEthPriceInUsd();
-
         uint256 gasCostInWei = gasUsed * tx.gasprice;
-        uint256 gasCostInUSD = (gasCostInWei * ethPriceUSD) / 1e18;
+        string memory gasCostInUSD = ethToUsd(gasCostInWei);
 
-        console.log("Gas Cost in USD", parseDecimal(gasCostInUSD, 18, 4));
+        console.log("Gas Cost in USD", gasCostInUSD);
 
         tipJarBalance = address(account._jar()).balance;
-        console.log("Tip Received", ethToUsd(tipJarBalance));
+        console.log("Tip Received in USD", ethToUsd(tipJarBalance));
 
         assert(tipJarBalance > 0);
         vm.stopBroadcast();
     }
 
     function test_Withdraw() public {
-        address owner = accounts.richard.addr;
+        address owner = accounts.owner.addr;
+
+        KarmaAccount account = _createAccount(owner);
 
         vm.startBroadcast(owner);
-        KarmaAccount account = factory.createAccount(owner, block.timestamp);
-        vm.deal(address(account), 100 ether);
 
-        bytes memory data = bytes("0x");
         vm.txGasPrice(2 * 1e8);
-        account.execute(accounts.gilfoyle.addr, 1 ether, data);
+        account.execute(accounts.user.addr, 1 ether, bytes("0x"));
 
         uint256 tipJarBalance = address(account._jar()).balance;
+        uint256 ownerBalancePre = address(owner).balance;
 
-        uint256 richardBalancePre = accounts.richard.addr.balance;
+        // Testing Withdraw Emit
+        vm.expectEmit(true, false, false, true);
+        emit Jar.Withdraw(address(owner), 3055400000000);
 
-        bytes memory withdrawData =
-            abi.encodeWithSignature("withdraw(uint256,address)", tipJarBalance, accounts.richard.addr);
+        account._jar().withdraw(tipJarBalance, owner);
 
-        account.execute(address(account._jar()), 0, withdrawData);
+        uint256 ownerBalancePost = address(owner).balance;
 
-        uint256 richardBalancePost = accounts.richard.addr.balance;
-        uint256 deposit = richardBalancePost - richardBalancePre;
-
-        assertEq(tipJarBalance, deposit);
-
+        assert(ownerBalancePost == (ownerBalancePre + tipJarBalance));
         vm.stopBroadcast();
     }
 }

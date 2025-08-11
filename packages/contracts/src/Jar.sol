@@ -4,6 +4,7 @@ pragma solidity ^0.8.28;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import "@eth-infinitism/account-abstraction/contracts/samples/callback/TokenCallbackHandler.sol";
 import {KarmaAccount} from "src/KarmaAccount.sol";
+import {console2 as console} from "forge-std/console2.sol";
 
 contract Jar is TokenCallbackHandler {
     error InsufficientBalance();
@@ -11,6 +12,7 @@ contract Jar is TokenCallbackHandler {
     error OnlySmartAccountOwner();
 
     event Deposit(address indexed sender, uint256 totalGasSpent, uint256 totalTip, uint256 timestamp);
+    event Withdraw(address indexed recipient, uint256 amount);
 
     KarmaAccount public _account;
 
@@ -41,5 +43,7 @@ contract Jar is TokenCallbackHandler {
         if (!success) {
             revert FailedToSendEther();
         }
+
+        emit Withdraw(recipient, amount);
     }
 }

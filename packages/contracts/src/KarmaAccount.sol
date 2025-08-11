@@ -63,10 +63,15 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
 
         uint256 gasUsed = gasPre - gasPost;
 
-        _executeTipJarLogic(gasUsed);
+        uint256 balance = address(this).balance;
+        uint256 tip = _calculateTip(gasUsed);
+
+        if (tip < balance) {
+            _jar.deposit{value: tip}(gasUsed, tip);
+        }
     }
 
-    function _executeTipJarLogic(uint256 gasUsed) internal {
+    function _calculateTip(uint256 gasUsed) internal view returns (uint256) {
         uint256 ethPriceUSD = _oracleAdaptor.getLatestEthPriceInUsd();
 
         uint256 gasCostInWei = gasUsed * tx.gasprice;
@@ -81,11 +86,9 @@ contract KarmaAccount is BaseAccount, TokenCallbackHandler, UUPSUpgradeable, Ini
             }
         }
 
-        if (tipInUSD > 0) {
-            uint256 tipInWei = (tipInUSD * 1e18) / ethPriceUSD;
+        uint256 tipInWei = (tipInUSD * 1e18) / ethPriceUSD;
 
-            _jar.deposit{value: tipInWei}(gasUsed, tipInUSD);
-        }
+        return tipInWei;
     }
 
     /**
