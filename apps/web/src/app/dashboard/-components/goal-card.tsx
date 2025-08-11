@@ -1,3 +1,9 @@
+import { useMemo } from "react";
+
+import Random from "rand-seed";
+
+import type { Goal } from "@/db/goal";
+
 const colors = [
   "#7DD3FC", // sky blue pastel
   "#A5F3FC", // tropical aqua
@@ -21,10 +27,18 @@ const colors = [
   "#D7E8BA", // light moss pastel
 ];
 
-export const GoalCard = () => {
-  const color = colors[Math.floor(Math.random() * colors.length)] as string;
+interface GoalCardProps {
+  goal: Goal;
+}
 
-  const progress = 30;
+export const GoalCard = ({ goal }: GoalCardProps) => {
+  const rand = new Random(goal.name).next();
+  const color = colors[Math.floor(rand * colors.length)] as string;
+
+  const progress = useMemo(() => {
+    return Math.floor((goal.currentAmount / goal.targetAmount) * 100);
+  }, [goal]);
+
   return (
     <div
       className="relative flex flex-col rounded-2xl p-3"
@@ -40,13 +54,15 @@ export const GoalCard = () => {
           border: `1px solid ${color}`,
         }}
       >
-        Lifestyle
+        {goal.category}
       </div>
       <div className="flex flex-row items-center gap-2">
-        <div className="text-3xl">😍</div>
+        <div className="text-3xl">{goal.emoji}</div>
         <div className="flex flex-col">
-          <div className="font-medium text-lg">Flowers</div>
-          <div className="text-neutral-500 text-sm">$2 of $5</div>
+          <div className="font-medium text-lg">{goal.name}</div>
+          <div className="text-neutral-500 text-sm">
+            ${goal.currentAmount} of ${goal.targetAmount}
+          </div>
         </div>
       </div>
       <div className="space-y-2 pt-4 font-medium text-neutral-600">
