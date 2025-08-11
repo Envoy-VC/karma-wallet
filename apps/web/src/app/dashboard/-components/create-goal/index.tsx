@@ -30,9 +30,15 @@ import {
   SelectValue,
 } from "@karma-wallet/ui/components/select";
 import { Textarea } from "@karma-wallet/ui/components/textarea";
+import { useNavigate } from "@tanstack/react-router";
 import { DollarSignIcon, SmilePlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod/v4";
+
+import { db } from "@/db";
+import { useSmartAccount } from "@/hooks";
+import { sleep } from "@/lib/utils";
 
 const formSchema = z.object({
   category: z.string(),
@@ -60,13 +66,31 @@ const goalCategories = [
 
 export const CreateGoalForm = () => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const { address } = useSmartAccount();
+  const navigate = useNavigate();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    const id = toast.loading("Creating Goal...");
+    await sleep("1s");
+    await db.goals.add({
+      _createdAt: new Date(),
+      _updatedAt: new Date(),
+      account: address ?? undefined,
+      category: data.category,
+      currentAmount: data.currentAmount,
+      emoji: data.icon,
+      name: data.goal,
+      note: data.note,
+      targetAmount: data.targetAmount,
+    });
+    toast.success("Goal Created!", { id });
+    await sleep("1s");
+    form.reset();
+    await navigate({ to: "/dashboard/goals" });
   };
 
   const emoji = form.watch("icon");

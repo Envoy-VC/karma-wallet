@@ -13,6 +13,8 @@
     "@wagmi/core": "^2.18.1",
     "@walletconnect/core": "^2.21.6",
     "@walletconnect/utils": "^2.21.6",
+    "dexie": "^4.0.11",
+    "dexie-react-hooks": "^1.1.7",
     "frimousse": "^0.3.0",
     "lucide-react": "^0.536.0",
     "motion": "^12.23.12",
