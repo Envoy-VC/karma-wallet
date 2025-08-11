@@ -32,9 +32,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@biconomy/abstractjs':
-        specifier: ^1.0.22
-        version: 1.0.22(@metamask/delegation-toolkit@0.11.0(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)))(@rhinestone/module-sdk@0.2.7(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)))(typescript@5.9.2)(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))
       '@hookform/resolvers':
         specifier: ^5.2.1
         version: 5.2.1(react-hook-form@7.62.0(react@19.1.1))
@@ -147,9 +144,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.6)
-      klarity:
-        specifier: ^0.0.5
-        version: 0.0.5
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -429,14 +423,6 @@ packages:
 
   '@base-org/account@1.1.1':
     resolution: {integrity: sha512-IfVJPrDPhHfqXRDb89472hXkpvJuQQR7FDI9isLPHEqSYt/45whIoBxSPgZ0ssTt379VhQo4+87PWI1DoLSfAQ==}
-
-  '@biconomy/abstractjs@1.0.22':
-    resolution: {integrity: sha512-GcQGWYt/ovtgKtI8NfLnMpjuqL7VjSReQLNN3y/vMzSwcTFuIM7YXNfJq109XfQpNlt06IW6PYXkCE6b3c66pw==}
-    peerDependencies:
-      '@metamask/delegation-toolkit': ^0.11.0
-      '@rhinestone/module-sdk': 0.2.7
-      typescript: ^5.8.2
-      viem: ^2.26.2
 
   '@biomejs/biome@2.1.3':
     resolution: {integrity: sha512-KE/tegvJIxTkl7gJbGWSgun7G6X/n2M6C35COT6ctYrAy7SiPyNvi6JtoQERVK/VRbttZfgGq96j2bFmhmnH4w==}
@@ -794,26 +780,6 @@ packages:
 
   '@lit/reactive-element@2.1.1':
     resolution: {integrity: sha512-N+dm5PAYdQ8e6UlywyyrgI2t++wFGXfHx+dSJ1oBrg6FAxUj40jId++EaRm80MKX5JnlH1sBsyZ5h0bcZKemCg==}
-
-  '@metamask/delegation-abis@0.11.0':
-    resolution: {integrity: sha512-tnNGFDLQ5jfgPhHJaT5JwvF759nja1iGAG00REbk1Ufir+TxjxTmF8L9MbJifZmUh4fnyqV4Ik6NAOYVNBPVBg==}
-    engines: {node: ^18.18 || >=20}
-
-  '@metamask/delegation-deployments@0.11.0':
-    resolution: {integrity: sha512-RfeMr1Ct0givG7oOy1unwdb5lGttq9pape4OGz2mk8quG0KDqDi7cw3fzYc7wz9xFDZ2YrFanYRacaLTlqWS8g==}
-    engines: {node: ^18.18 || >=20}
-
-  '@metamask/delegation-toolkit@0.11.0':
-    resolution: {integrity: sha512-KQybftUahuPPjN842ejmVaJWg2rzHpSpvd+b6qtiOBypzJs7cgw1/f8QalHLugS1eyicEYLXwvRxjjufiG4wbg==}
-    engines: {node: ^18.18 || >=20}
-    peerDependencies:
-      viem: '>=2.18.2 <3.0.0'
-
-  '@metamask/delegation-utils@0.11.0':
-    resolution: {integrity: sha512-eg8icyDtbzwER/G3VvaiVUNiNr9GXxJXQMcFRbhm9tTMqWXpphYXk9edSungRF+QqYmXIytRiR2ChSHp0uNtew==}
-    engines: {node: ^18.18 || >=20}
-    peerDependencies:
-      viem: '>=2.18.2 <3.0.0'
 
   '@metamask/eth-json-rpc-provider@1.0.1':
     resolution: {integrity: sha512-whiUMPlAOrVGmX8aKYVPvlKyG4CpQXiNNyt74vE1xb5sPvmx5oA7B/kOi/JdBvhGQq97U1/AVdXEdk2zkP8qyA==}
@@ -1337,11 +1303,6 @@ packages:
 
   '@reown/walletkit@1.2.9':
     resolution: {integrity: sha512-uRVMtaCG2WJWpFPh+o9TvNjb5EdflGoKOnRy9k0grX0Rl6fCgSIghUNQqDQ59o3XTBL0w7KPCznr/qvt9AXASQ==}
-
-  '@rhinestone/module-sdk@0.2.7':
-    resolution: {integrity: sha512-clZVB6erRdkDpaYodFsRVhU+Sj4immytLWK76jL9MsjnBg9vDEEMK3izUpsGax6YLDI0/QTrn0sW0qyhLz8fBQ==}
-    peerDependencies:
-      viem: ^2.0.0
 
   '@rolldown/pluginutils@1.0.0-beta.27':
     resolution: {integrity: sha512-+d0F4MKMCbeVUJwG96uQ4SgAznZNSq93I3V+9NHA4OpvqG8mRCpGdKmK8l/dl02h2CCDHwW2FqilnTyDcAnqjA==}
@@ -2790,9 +2751,6 @@ packages:
   keyvaluestorage-interface@1.0.0:
     resolution: {integrity: sha512-8t6Q3TclQ4uZynJY9IGr2+SsIGwK9JHcO6ootkHCGA0CrQCRy+VkouYNO2xicET6b9al7QKzpebNow+gkpCL8g==}
 
-  klarity@0.0.5:
-    resolution: {integrity: sha512-4Iz+Gebnc9nwKuezsr+c51VwGuv4Q7v5dsPFUCqvUlW54nnyZjv3b1ovq3yihP2m4VVaJ8UvnOWf46tcUchkVg==}
-
   lefthook-darwin-arm64@1.12.2:
     resolution: {integrity: sha512-fTxeI9tEskrHjc3QyEO+AG7impBXY2Ed8V5aiRc3fw9POfYtVh9b5jRx90fjk2+ld5hf+Z1DsyyLq/vOHDFskQ==}
     cpu: [arm64]
@@ -3514,9 +3472,6 @@ packages:
     resolution: {integrity: sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==}
     engines: {node: '>=10.0.0'}
 
-  solady@0.0.235:
-    resolution: {integrity: sha512-JUEXLDG7ag3HmqUnrDG7ilhafH6R9bFPpwV63O2kH4UbnS2+gRGEOqqy4k01O7tHjo3MWkDD0cpG+UY9pjy/fQ==}
-
   solid-js@1.9.7:
     resolution: {integrity: sha512-/saTKi8iWEM233n5OSi1YHCCuh66ZIQ7aK2hsToPe4tqGm7qAejU1SwNuTPivbWAYq7SjuHVVYxxuZQNRbICiw==}
 
@@ -3944,9 +3899,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  webauthn-p256@0.0.5:
-    resolution: {integrity: sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg==}
 
   webextension-polyfill@0.10.0:
     resolution: {integrity: sha512-c5s35LgVa5tFaHhrZDnr3FpQpjj1BB+RXhLTYUxGqBVN460HkbM8TBtEqdXWbpTKfzwCcjAZVF7zXCYSKtcp9g==}
@@ -4384,13 +4336,6 @@ snapshots:
       - zod
     optional: true
 
-  '@biconomy/abstractjs@1.0.22(@metamask/delegation-toolkit@0.11.0(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)))(@rhinestone/module-sdk@0.2.7(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)))(typescript@5.9.2)(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))':
-    dependencies:
-      '@metamask/delegation-toolkit': 0.11.0(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))
-      '@rhinestone/module-sdk': 0.2.7(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))
-      typescript: 5.9.2
-      viem: 2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)
-
   '@biomejs/biome@2.1.3':
     optionalDependencies:
       '@biomejs/cli-darwin-arm64': 2.1.3
@@ -4748,23 +4693,6 @@ snapshots:
   '@lit/reactive-element@2.1.1':
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.4.0
-
-  '@metamask/delegation-abis@0.11.0': {}
-
-  '@metamask/delegation-deployments@0.11.0': {}
-
-  '@metamask/delegation-toolkit@0.11.0(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))':
-    dependencies:
-      '@metamask/delegation-utils': 0.11.0(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))
-      viem: 2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)
-      webauthn-p256: 0.0.5
-
-  '@metamask/delegation-utils@0.11.0(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))':
-    dependencies:
-      '@metamask/delegation-abis': 0.11.0
-      '@metamask/delegation-deployments': 0.11.0
-      buffer: 6.0.3
-      viem: 2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)
 
   '@metamask/eth-json-rpc-provider@1.0.1':
     dependencies:
@@ -5904,12 +5832,6 @@ snapshots:
       - uploadthing
       - utf-8-validate
       - zod
-
-  '@rhinestone/module-sdk@0.2.7(viem@2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14))':
-    dependencies:
-      solady: 0.0.235
-      tslib: 2.8.1
-      viem: 2.33.2(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@4.0.14)
 
   '@rolldown/pluginutils@1.0.0-beta.27': {}
 
@@ -8248,8 +8170,6 @@ snapshots:
 
   keyvaluestorage-interface@1.0.0: {}
 
-  klarity@0.0.5: {}
-
   lefthook-darwin-arm64@1.12.2:
     optional: true
 
@@ -8969,8 +8889,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  solady@0.0.235: {}
-
   solid-js@1.9.7:
     dependencies:
       csstype: 3.1.3
@@ -9387,11 +9305,6 @@ snapshots:
       - uploadthing
       - utf-8-validate
       - zod
-
-  webauthn-p256@0.0.5:
-    dependencies:
-      '@noble/curves': 1.9.2
-      '@noble/hashes': 1.8.0
 
   webextension-polyfill@0.10.0: {}
 

@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@biconomy/abstractjs": "^1.0.22",
     "@hookform/resolvers": "^5.2.1",
     "@karma-wallet/ui": "workspace:*",
     "@reown/appkit": "^1.7.18",
@@ -40,7 +39,6 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",
-    "klarity": "^0.0.5",
     "postcss": "^8.5.6",
     "postcss-load-config": "^6.0.1",
     "tailwindcss": "^4.1.11",
