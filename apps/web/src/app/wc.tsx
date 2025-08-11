@@ -14,11 +14,11 @@ const walletConnectSchema = z.object({
 });
 
 export const Route = createFileRoute("/wc")({
-  component: RouteComponent,
+  component: WalletConnectPage,
   validateSearch: (search) => walletConnectSchema.parse(search),
 });
 
-function RouteComponent() {
+function WalletConnectPage() {
   const { walletKit } = useWalletConnect();
   const [uri, setUri] = useState<string>("");
   const searchParams = useSearch({
@@ -29,7 +29,7 @@ function RouteComponent() {
   const onPair = async (uri: string) => {
     try {
       if (!walletKit) {
-        console.log("WalletKit not initialized");
+        console.warn("WalletKit not initialized");
         return;
       }
       await walletKit.pair({ uri: uri });

@@ -1,4 +1,7 @@
+import { useCallback } from "react";
+
 import type { IWalletKit } from "@reown/walletkit";
+import type { SessionTypes } from "@walletconnect/types";
 import { create } from "zustand";
 
 interface WalletConnectStore {
@@ -14,5 +17,13 @@ const useWalletConnectStore = create<WalletConnectStore>((set) => ({
 export const useWalletConnect = () => {
   const { walletKit, setWalletKit } = useWalletConnectStore();
 
-  return { setWalletKit, walletKit };
+  const handleRedirect = useCallback((session: SessionTypes.Struct) => {
+    console.log(session.peer.metadata.url);
+    if (window.opener) {
+      window.opener.location.href = session.peer.metadata.url;
+      window.close();
+    }
+  }, []);
+
+  return { handleRedirect, setWalletKit, walletKit };
 };

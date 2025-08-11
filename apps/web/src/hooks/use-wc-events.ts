@@ -8,7 +8,7 @@ import { useSmartAccount } from "./use-account";
 import { useWalletConnect } from "./use-wc";
 
 export const useWalletConnectEvents = (initialized: boolean) => {
-  const { walletKit } = useWalletConnect();
+  const { walletKit, handleRedirect } = useWalletConnect();
   const { address } = useSmartAccount();
   const chains = useChains();
   // ===========================================================================
@@ -22,9 +22,6 @@ export const useWalletConnectEvents = (initialized: boolean) => {
 
       const eipChains = chains.map((c) => `eip155:11155111`);
       const eipAccounts = chains.map((c) => `eip155:11155111:${address}`);
-
-      console.log("eipChains", eipChains);
-      console.log("eipAccounts", eipAccounts);
 
       const approvedNamespaces = buildApprovedNamespaces({
         proposal: params,
@@ -65,13 +62,13 @@ export const useWalletConnectEvents = (initialized: boolean) => {
           },
         },
       });
-      await walletKit.approveSession({
+      const session = await walletKit.approveSession({
         id: id,
         namespaces: approvedNamespaces,
       });
-      console.log("Session approved");
+      handleRedirect(session);
     },
-    [walletKit, address, chains],
+    [walletKit, address, chains, handleRedirect],
   );
 
   // ===========================================================================

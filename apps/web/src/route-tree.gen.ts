@@ -17,6 +17,7 @@ import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
 import { Route as DashboardSavingsRouteImport } from "./app/dashboard/savings";
 import { Route as DashboardSendIndexRouteImport } from "./app/dashboard/send/index";
 import { Route as DashboardSettingsRouteImport } from "./app/dashboard/settings";
+import { Route as DashboardWcRouteImport } from "./app/dashboard/wc";
 import { Route as IndexRouteImport } from "./app/index";
 import { Route as WcRouteImport } from "./app/wc";
 
@@ -44,6 +45,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   getParentRoute: () => DashboardRouteRoute,
   id: "/",
   path: "/",
+} as any);
+const DashboardWcRoute = DashboardWcRouteImport.update({
+  getParentRoute: () => DashboardRouteRoute,
+  id: "/wc",
+  path: "/wc",
 } as any);
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   getParentRoute: () => DashboardRouteRoute,
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   "/wc": typeof WcRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/wc": typeof DashboardWcRoute;
   "/dashboard/": typeof DashboardIndexRoute;
   "/dashboard/goals/create": typeof DashboardGoalsCreateRoute;
   "/dashboard/goals": typeof DashboardGoalsIndexRoute;
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   "/wc": typeof WcRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/wc": typeof DashboardWcRoute;
   "/dashboard": typeof DashboardIndexRoute;
   "/dashboard/goals/create": typeof DashboardGoalsCreateRoute;
   "/dashboard/goals": typeof DashboardGoalsIndexRoute;
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   "/wc": typeof WcRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
+  "/dashboard/wc": typeof DashboardWcRoute;
   "/dashboard/": typeof DashboardIndexRoute;
   "/dashboard/goals/create": typeof DashboardGoalsCreateRoute;
   "/dashboard/goals/": typeof DashboardGoalsIndexRoute;
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | "/wc"
     | "/dashboard/savings"
     | "/dashboard/settings"
+    | "/dashboard/wc"
     | "/dashboard/"
     | "/dashboard/goals/create"
     | "/dashboard/goals"
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | "/wc"
     | "/dashboard/savings"
     | "/dashboard/settings"
+    | "/dashboard/wc"
     | "/dashboard"
     | "/dashboard/goals/create"
     | "/dashboard/goals"
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | "/wc"
     | "/dashboard/savings"
     | "/dashboard/settings"
+    | "/dashboard/wc"
     | "/dashboard/"
     | "/dashboard/goals/create"
     | "/dashboard/goals/"
@@ -189,6 +201,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardIndexRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
+    "/dashboard/wc": {
+      id: "/dashboard/wc";
+      path: "/wc";
+      fullPath: "/dashboard/wc";
+      preLoaderRoute: typeof DashboardWcRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
+    };
     "/dashboard/settings": {
       id: "/dashboard/settings";
       path: "/settings";
@@ -230,6 +249,7 @@ declare module "@tanstack/react-router" {
 interface DashboardRouteRouteChildren {
   DashboardSavingsRoute: typeof DashboardSavingsRoute;
   DashboardSettingsRoute: typeof DashboardSettingsRoute;
+  DashboardWcRoute: typeof DashboardWcRoute;
   DashboardIndexRoute: typeof DashboardIndexRoute;
   DashboardGoalsCreateRoute: typeof DashboardGoalsCreateRoute;
   DashboardGoalsIndexRoute: typeof DashboardGoalsIndexRoute;
@@ -243,6 +263,7 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardSavingsRoute: DashboardSavingsRoute,
   DashboardSendIndexRoute: DashboardSendIndexRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardWcRoute: DashboardWcRoute,
 };
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
