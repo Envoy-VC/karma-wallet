@@ -5,11 +5,14 @@ import type { IWalletKit } from "@reown/walletkit";
 import { useRouter } from "@tanstack/react-router";
 import type { SessionTypes } from "@walletconnect/types";
 import { buildApprovedNamespaces } from "@walletconnect/utils";
-import { useAccount, useChains, useSignMessage } from "wagmi";
+import { useAccount, useChains, useSignMessage, useSignTypedData } from "wagmi";
 import { create } from "zustand";
 
 import { useWcModalStore } from "@/lib/stores";
-import { parseSignMessageRequest } from "@/lib/utils";
+import {
+  parseSignMessageRequest,
+  parseSignTypedDataRequest,
+} from "@/lib/utils";
 
 // import { useSmartAccount } from "./use-account";
 
@@ -37,6 +40,7 @@ export const useWalletConnect = () => {
 
   // TODO: Temporary
   const { signMessageAsync } = useSignMessage();
+  const { signTypedDataAsync } = useSignTypedData();
 
   const removeSearchParams = () => {
     router.navigate({ search: {}, to: "/dashboard/wc" });
@@ -104,7 +108,6 @@ export const useWalletConnect = () => {
       id: modalStore.pendingProposal.id,
       namespaces: approvedNamespaces,
     });
-    modalStore.setPendingProposal(undefined);
     handleRedirect(session);
     removeSearchParams();
   };
@@ -131,10 +134,32 @@ export const useWalletConnect = () => {
     });
   };
 
+  const signTypedData = async () => {
+    if (!wcStore.walletKit) {
+      throw new Error("WalletKit not initialized");
+    }
+    if (!modalStore.currentRequest) {
+      throw new Error("Sign request not found");
+    }
+    const request = parseSignTypedDataRequest(modalStore.currentRequest);
+    const now = Math.floor(Date.now() / 1000);
+    if (request.expiryTimestamp && now > request.expiryTimestamp) {
+      throw new Error("Request expired");
+    }
+    const signature = await signTypedDataAsync(request.params.data);
+    const res = formatJsonRpcResult(request.id, signature);
+    await wcStore.walletKit.respondSessionRequest({
+      response: res,
+      topic: modalStore.currentRequest.topic,
+    });
+  };
+
   return {
     acceptPendingProposal,
     handleRedirect,
+    removeSearchParams,
     signMessage,
+    signTypedData,
     ...wcStore,
     ...modalStore,
   };

@@ -29,7 +29,7 @@ const WalletConnectPage = () => {
 
   return (
     <div className="relative h-full">
-      <div className="absolute top-[10%] right-1/2 translate-x-1/2">
+      <div className="absolute top-[10%] right-1/2 w-full translate-x-1/2">
         <WalletConnectCard />
       </div>
     </div>

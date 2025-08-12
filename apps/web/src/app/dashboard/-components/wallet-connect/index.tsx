@@ -6,6 +6,7 @@ import {
   DappConnectScreen,
   DefaultScreen,
   SignMessageScreen,
+  SignTypedDataScreen,
 } from "./screens";
 
 const Comp = () => {
@@ -18,6 +19,8 @@ const Comp = () => {
     return <DappConnectScreen />;
   } else if (activeScreen === "sign-message") {
     return <SignMessageScreen />;
+  } else if (activeScreen === "sign-typed-data") {
+    return <SignTypedDataScreen />;
   }
 
   return <DefaultScreen />;
@@ -26,7 +29,7 @@ const Comp = () => {
 export const WalletConnectCard = () => {
   return (
     <AnimateChangeInHeight>
-      <div className="mx-auto max-w-sm space-y-2 rounded-[1.5rem] border shadow">
+      <div className="mx-auto w-full max-w-sm space-y-2 rounded-[1.5rem] border shadow">
         <Comp />
       </div>
     </AnimateChangeInHeight>

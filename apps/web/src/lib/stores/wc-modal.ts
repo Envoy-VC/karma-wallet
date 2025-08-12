@@ -6,7 +6,7 @@ export type WcScreen =
   | "connect"
   | "dapp-connect"
   | "sign-message"
-  | "sign-typed-message";
+  | "sign-typed-data";
 type ConnectionStatus = "idle" | "connecting" | "connected" | "error";
 type Request = SignClientTypes.EventArguments["session_request"];
 

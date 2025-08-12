@@ -9,6 +9,19 @@ export const truncateEthAddress = (address: string | undefined) => {
 
 type Duration = `${number}ms` | `${number}s` | `${number}m` | `${number}h`;
 
+export interface TypedDataV4 {
+  types: {
+    // biome-ignore lint/style/useNamingConvention: safe
+    EIP712Domain: { name: string; type: string }[];
+    [additionalType: string]: { name: string; type: string }[];
+  };
+  primaryType: string;
+  // biome-ignore lint/suspicious/noExplicitAny: safe
+  domain: Record<string, any>;
+  // biome-ignore lint/suspicious/noExplicitAny: safe
+  message: Record<string, any>;
+}
+
 export const sleep = (duration: Duration) => {
   let time: number;
   if (duration.endsWith("ms")) {
@@ -54,6 +67,24 @@ export const parseSignMessageRequest = (
     params: {
       address,
       message: hexMessage,
+    },
+  };
+};
+
+export const parseSignTypedDataRequest = (
+  sessionRequest: SignClientTypes.EventArguments["session_request"],
+) => {
+  const { id, params } = sessionRequest;
+  const { chainId, request } = params;
+  const [address, data] = request.params as [Hex, string];
+  return {
+    chainId,
+    expiryTimestamp: request.expiryTimestamp,
+    id,
+    method: request.method as "eth_signTypedData_v4",
+    params: {
+      address,
+      data: JSON.parse(data) as TypedDataV4,
     },
   };
 };

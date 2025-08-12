@@ -13,6 +13,7 @@ export const ConnectDappButton = () => {
     setConnectionStatus,
     acceptPendingProposal,
     setActiveScreen,
+    setPendingProposal,
   } = useWalletConnect();
 
   const onCreateWallet = async () => {
@@ -25,6 +26,7 @@ export const ConnectDappButton = () => {
       setConnectionStatus("idle");
       await sleep("1s");
       setActiveScreen("default");
+      setPendingProposal(undefined);
     } catch (error: unknown) {
       setConnectionStatus("error");
       console.error(error);

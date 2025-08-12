@@ -42,6 +42,8 @@ export const useWalletConnectEvents = (initialized: boolean) => {
 
       if (["eth_sign", "personal_sign"].includes(request.method)) {
         setActiveScreen("sign-message");
+      } else if (request.method === "eth_signTypedData_v4") {
+        setActiveScreen("sign-typed-data");
       }
     },
     [setActiveScreen, setCurrentRequest, setCurrentSession, walletKit],
