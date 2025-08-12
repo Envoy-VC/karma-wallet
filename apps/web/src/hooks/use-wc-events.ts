@@ -5,8 +5,14 @@ import type { SignClientTypes } from "@walletconnect/types";
 import { useWalletConnect } from "./use-wc";
 
 export const useWalletConnectEvents = (initialized: boolean) => {
-  const { walletKit, setPendingProposal, setActiveScreen, setActiveSessions } =
-    useWalletConnect();
+  const {
+    walletKit,
+    setPendingProposal,
+    setActiveScreen,
+    setActiveSessions,
+    setCurrentSession,
+    setCurrentRequest,
+  } = useWalletConnect();
   // ===========================================================================
   //                           Session Proposal
   // ===========================================================================
@@ -27,8 +33,18 @@ export const useWalletConnectEvents = (initialized: boolean) => {
   const onSessionRequest = useCallback(
     (requestEvent: SignClientTypes.EventArguments["session_request"]) => {
       console.log("session_request", requestEvent);
+
+      const { topic, params } = requestEvent;
+      const { request } = params;
+      const requestSession = walletKit?.engine.signClient.session.get(topic);
+      setCurrentSession(requestSession);
+      setCurrentRequest(requestEvent);
+
+      if (["eth_sign", "personal_sign"].includes(request.method)) {
+        setActiveScreen("sign-message");
+      }
     },
-    [],
+    [setActiveScreen, setCurrentRequest, setCurrentSession, walletKit],
   );
 
   // ===========================================================================
@@ -44,9 +60,8 @@ export const useWalletConnectEvents = (initialized: boolean) => {
   const refreshSessionsList = () => {
     if (!walletKit) return;
     const sessions = walletKit.getActiveSessions();
+    console.log("SESSIONS", sessions);
     setActiveSessions(sessions);
-
-    console.log("sessions", sessions);
   };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: safe

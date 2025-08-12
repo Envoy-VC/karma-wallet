@@ -1,14 +1,17 @@
 import { useCallback } from "react";
 
+import { formatJsonRpcResult } from "@json-rpc-tools/utils";
 import type { IWalletKit } from "@reown/walletkit";
+import { useRouter } from "@tanstack/react-router";
 import type { SessionTypes } from "@walletconnect/types";
 import { buildApprovedNamespaces } from "@walletconnect/utils";
-import { useChains } from "wagmi";
+import { useAccount, useChains, useSignMessage } from "wagmi";
 import { create } from "zustand";
 
 import { useWcModalStore } from "@/lib/stores";
+import { parseSignMessageRequest } from "@/lib/utils";
 
-import { useSmartAccount } from "./use-account";
+// import { useSmartAccount } from "./use-account";
 
 interface WalletConnectStore {
   walletKit: IWalletKit | undefined;
@@ -25,11 +28,19 @@ const useWalletConnectStore = create<WalletConnectStore>((set) => ({
 }));
 
 export const useWalletConnect = () => {
-  const { walletKit, setWalletKit, setActiveSessions } =
-    useWalletConnectStore();
+  const router = useRouter();
+  const wcStore = useWalletConnectStore();
   const modalStore = useWcModalStore();
   const chains = useChains();
-  const { address } = useSmartAccount();
+  // const { address } = useSmartAccount();
+  const { address } = useAccount();
+
+  // TODO: Temporary
+  const { signMessageAsync } = useSignMessage();
+
+  const removeSearchParams = () => {
+    router.navigate({ search: {}, to: "/dashboard/wc" });
+  };
 
   const handleRedirect = useCallback((session: SessionTypes.Struct) => {
     console.log(session.peer.metadata.url);
@@ -39,8 +50,8 @@ export const useWalletConnect = () => {
     }
   }, []);
 
-  const acceptPendingProposal = useCallback(async () => {
-    if (!walletKit) {
+  const acceptPendingProposal = async () => {
+    if (!wcStore.walletKit) {
       throw new Error("WalletKit not initialized");
     }
     if (!modalStore.pendingProposal) {
@@ -89,27 +100,42 @@ export const useWalletConnect = () => {
         },
       },
     });
-    const session = await walletKit.approveSession({
+    const session = await wcStore.walletKit.approveSession({
       id: modalStore.pendingProposal.id,
       namespaces: approvedNamespaces,
     });
     modalStore.setPendingProposal(undefined);
     handleRedirect(session);
-  }, [
-    walletKit,
-    address,
-    chains,
-    modalStore.pendingProposal,
-    handleRedirect,
-    modalStore.setPendingProposal,
-  ]);
+    removeSearchParams();
+  };
+
+  const signMessage = async () => {
+    if (!wcStore.walletKit) {
+      throw new Error("WalletKit not initialized");
+    }
+    if (!modalStore.currentRequest) {
+      throw new Error("Sign request not found");
+    }
+    const request = parseSignMessageRequest(modalStore.currentRequest);
+    const now = Math.floor(Date.now() / 1000);
+    if (request.expiryTimestamp && now > request.expiryTimestamp) {
+      throw new Error("Request expired");
+    }
+    const signature = await signMessageAsync({
+      message: { raw: request.params.message },
+    });
+    const res = formatJsonRpcResult(request.id, signature);
+    await wcStore.walletKit.respondSessionRequest({
+      response: res,
+      topic: modalStore.currentRequest.topic,
+    });
+  };
 
   return {
-    handleRedirect,
-    setActiveSessions,
-    setWalletKit,
-    walletKit,
-    ...modalStore,
     acceptPendingProposal,
+    handleRedirect,
+    signMessage,
+    ...wcStore,
+    ...modalStore,
   };
 };

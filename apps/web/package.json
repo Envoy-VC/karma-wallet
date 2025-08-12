@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
+    "@json-rpc-tools/utils": "^1.7.6",
     "@karma-wallet/ui": "workspace:*",
     "@reown/appkit": "^1.7.19",
     "@reown/appkit-adapter-wagmi": "^1.7.19",

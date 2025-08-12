@@ -1,4 +1,6 @@
+import type { SessionTypes, SignClientTypes } from "@walletconnect/types";
 import { serializeError } from "serialize-error";
+import type { Hex } from "viem";
 
 export const truncateEthAddress = (address: string | undefined) => {
   if (!address) return "";
@@ -36,4 +38,32 @@ export const parseErrorMessage = (error: unknown) => {
   }
 
   return "An unknown error occurred";
+};
+
+export const parseSignMessageRequest = (
+  sessionRequest: SignClientTypes.EventArguments["session_request"],
+) => {
+  const { id, params } = sessionRequest;
+  const { chainId, request } = params;
+  const [hexMessage, address] = request.params as [Hex, Hex];
+  return {
+    chainId,
+    expiryTimestamp: request.expiryTimestamp,
+    id,
+    method: request.method as "eth_sign" | "personal_sign",
+    params: {
+      address,
+      message: hexMessage,
+    },
+  };
+};
+
+export const parseSession = (session: SessionTypes.Struct | undefined) => {
+  const name = session?.peer.metadata.name ?? "Instadapp";
+  const url = session?.peer.metadata.url ?? "http://localhost:3000";
+  const icon =
+    session?.peer.metadata.icons[0] ??
+    "https://images.mirror-media.xyz/publication-images/Lx_fohJ8ttprQ3DmDKU9N.png?height=2048&width=2048";
+  const description = session?.peer.metadata.description ?? "No description";
+  return { description, icon, name, url };
 };
