@@ -6,10 +6,12 @@ import { ScanIcon } from "@karma-wallet/ui/icons";
 import { Scanner } from "@yudiel/react-qr-scanner";
 
 import { QrScannerOverlay } from "@/components";
+import { useWalletConnect } from "@/hooks";
 
 export const ConnectScreen = () => {
+  const { connectionString, setConnectionString, walletKit } =
+    useWalletConnect();
   const [isScanning, setIsScanning] = useState(false);
-  const [connectionString, setConnectionString] = useState("");
 
   return (
     <div>
@@ -62,8 +64,10 @@ export const ConnectScreen = () => {
         )}
         <div className="relative">
           <Input
-            className="!rounded-full h-10 pr-8"
+            className="!rounded-full h-10 pr-12"
+            onChange={(e) => setConnectionString(e.target.value)}
             placeholder="QR code of link"
+            value={connectionString}
           />
           <div className="-translate-y-1/2 absolute top-1/2 right-4">
             <Button
@@ -79,8 +83,10 @@ export const ConnectScreen = () => {
         </div>
         <Button
           className="w-full rounded-full"
-          onClick={() => {
-            console.log(connectionString);
+          onClick={async () => {
+            if (!connectionString) return;
+            await walletKit?.pair({ uri: connectionString });
+            setConnectionString(undefined);
           }}
         >
           Connect

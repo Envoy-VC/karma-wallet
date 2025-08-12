@@ -1,7 +1,7 @@
 import { AnimateChangeInHeight } from "@/components";
 import { useWalletConnect } from "@/hooks";
 
-import { ConnectScreen, DefaultScreen } from "./screens";
+import { ConnectScreen, DappConnectScreen, DefaultScreen } from "./screens";
 
 const Comp = () => {
   const { activeScreen } = useWalletConnect();
@@ -9,6 +9,8 @@ const Comp = () => {
     return <ConnectScreen />;
   } else if (activeScreen === "default") {
     return <DefaultScreen />;
+  } else if (activeScreen === "dapp-connect") {
+    return <DappConnectScreen />;
   } else {
     return <DefaultScreen />;
   }

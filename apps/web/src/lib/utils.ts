@@ -1,3 +1,5 @@
+import { serializeError } from "serialize-error";
+
 export const truncateEthAddress = (address: string | undefined) => {
   if (!address) return "";
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -19,4 +21,19 @@ export const sleep = (duration: Duration) => {
     throw new Error("Invalid duration");
   }
   return new Promise((resolve) => setTimeout(resolve, time));
+};
+
+export const parseErrorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  const serialized = serializeError(error);
+  if (
+    typeof serialized === "object" &&
+    serialized !== null &&
+    "message" in serialized &&
+    typeof serialized.message === "string"
+  ) {
+    return serialized.message;
+  }
+
+  return "An unknown error occurred";
 };

@@ -19,13 +19,7 @@ import { Route as DashboardSendIndexRouteImport } from "./app/dashboard/send/ind
 import { Route as DashboardSettingsRouteImport } from "./app/dashboard/settings";
 import { Route as DashboardWcRouteImport } from "./app/dashboard/wc";
 import { Route as IndexRouteImport } from "./app/index";
-import { Route as WcRouteImport } from "./app/wc";
 
-const WcRoute = WcRouteImport.update({
-  getParentRoute: () => rootRouteImport,
-  id: "/wc",
-  path: "/wc",
-} as any);
 const CreateRoute = CreateRouteImport.update({
   getParentRoute: () => rootRouteImport,
   id: "/create",
@@ -81,7 +75,6 @@ export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
-  "/wc": typeof WcRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
   "/dashboard/wc": typeof DashboardWcRoute;
@@ -93,7 +86,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
   "/create": typeof CreateRoute;
-  "/wc": typeof WcRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
   "/dashboard/wc": typeof DashboardWcRoute;
@@ -107,7 +99,6 @@ export interface FileRoutesById {
   "/": typeof IndexRoute;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
-  "/wc": typeof WcRoute;
   "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
   "/dashboard/wc": typeof DashboardWcRoute;
@@ -122,7 +113,6 @@ export interface FileRouteTypes {
     | "/"
     | "/dashboard"
     | "/create"
-    | "/wc"
     | "/dashboard/savings"
     | "/dashboard/settings"
     | "/dashboard/wc"
@@ -134,7 +124,6 @@ export interface FileRouteTypes {
   to:
     | "/"
     | "/create"
-    | "/wc"
     | "/dashboard/savings"
     | "/dashboard/settings"
     | "/dashboard/wc"
@@ -147,7 +136,6 @@ export interface FileRouteTypes {
     | "/"
     | "/dashboard"
     | "/create"
-    | "/wc"
     | "/dashboard/savings"
     | "/dashboard/settings"
     | "/dashboard/wc"
@@ -161,18 +149,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
   CreateRoute: typeof CreateRoute;
-  WcRoute: typeof WcRoute;
 }
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/wc": {
-      id: "/wc";
-      path: "/wc";
-      fullPath: "/wc";
-      preLoaderRoute: typeof WcRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
     "/create": {
       id: "/create";
       path: "/create";
@@ -274,7 +254,6 @@ const rootRouteChildren: RootRouteChildren = {
   CreateRoute: CreateRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   IndexRoute: IndexRoute,
-  WcRoute: WcRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

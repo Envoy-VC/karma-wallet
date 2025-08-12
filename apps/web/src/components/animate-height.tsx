@@ -15,7 +15,7 @@ export const AnimateChangeInHeight = (
     <motion.div
       animate={{ height }}
       style={{ height }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.4 }}
       {...props}
       className={cn(props.className, "overflow-hidden")}
     >

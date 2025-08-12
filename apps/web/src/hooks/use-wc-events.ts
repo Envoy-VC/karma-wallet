@@ -1,74 +1,24 @@
 import { useCallback, useEffect } from "react";
 
 import type { SignClientTypes } from "@walletconnect/types";
-import { buildApprovedNamespaces } from "@walletconnect/utils";
-import { useChains } from "wagmi";
 
-import { useSmartAccount } from "./use-account";
 import { useWalletConnect } from "./use-wc";
 
 export const useWalletConnectEvents = (initialized: boolean) => {
-  const { walletKit, handleRedirect } = useWalletConnect();
-  const { address } = useSmartAccount();
-  const chains = useChains();
+  const { walletKit, setPendingProposal, setActiveScreen, setActiveSessions } =
+    useWalletConnect();
   // ===========================================================================
   //                           Session Proposal
   // ===========================================================================
   const onSessionProposal = useCallback(
-    async (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
+    (proposal: SignClientTypes.EventArguments["session_proposal"]) => {
       console.log("session_proposal", proposal);
-      const { id, params } = proposal;
-      if (!walletKit) return;
 
-      const eipChains = chains.map((c) => `eip155:11155111`);
-      const eipAccounts = chains.map((c) => `eip155:11155111:${address}`);
-
-      const approvedNamespaces = buildApprovedNamespaces({
-        proposal: params,
-        supportedNamespaces: {
-          eip155: {
-            accounts: eipAccounts,
-            chains: eipChains,
-            events: [
-              "chainChanged",
-              "accountsChanged",
-              "message",
-              "disconnect",
-              "connect",
-            ],
-            methods: [
-              "eth_accounts",
-              "eth_requestAccounts",
-              "eth_sendRawTransaction",
-              "eth_sign",
-              "eth_signTransaction",
-              "eth_signTypedData",
-              "eth_signTypedData_v3",
-              "eth_signTypedData_v4",
-              "eth_sendTransaction",
-              "personal_sign",
-              "wallet_switchEthereumChain",
-              "wallet_addEthereumChain",
-              "wallet_getPermissions",
-              "wallet_requestPermissions",
-              "wallet_registerOnboarding",
-              "wallet_watchAsset",
-              "wallet_scanQRCode",
-              "wallet_sendCalls",
-              "wallet_getCallsStatus",
-              "wallet_showCallsStatus",
-              "wallet_getCapabilities",
-            ],
-          },
-        },
-      });
-      const session = await walletKit.approveSession({
-        id: id,
-        namespaces: approvedNamespaces,
-      });
-      handleRedirect(session);
+      // Handle the session proposal
+      setPendingProposal(proposal);
+      setActiveScreen("dapp-connect");
     },
-    [walletKit, address, chains, handleRedirect],
+    [setActiveScreen, setPendingProposal],
   );
 
   // ===========================================================================
@@ -94,6 +44,8 @@ export const useWalletConnectEvents = (initialized: boolean) => {
   const refreshSessionsList = () => {
     if (!walletKit) return;
     const sessions = walletKit.getActiveSessions();
+    setActiveSessions(sessions);
+
     console.log("sessions", sessions);
   };
 
