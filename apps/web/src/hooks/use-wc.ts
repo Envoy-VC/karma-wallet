@@ -5,11 +5,19 @@ import type { IWalletKit } from "@reown/walletkit";
 import { useRouter } from "@tanstack/react-router";
 import type { SessionTypes } from "@walletconnect/types";
 import { buildApprovedNamespaces } from "@walletconnect/utils";
-import { useAccount, useChains, useSignMessage, useSignTypedData } from "wagmi";
+import { hexToBigInt } from "viem";
+import {
+  useAccount,
+  useChains,
+  useSendTransaction,
+  useSignMessage,
+  useSignTypedData,
+} from "wagmi";
 import { create } from "zustand";
 
 import { useWcModalStore } from "@/lib/stores";
 import {
+  parseSendTransactionRequest,
   parseSignMessageRequest,
   parseSignTypedDataRequest,
 } from "@/lib/utils";
@@ -41,6 +49,7 @@ export const useWalletConnect = () => {
   // TODO: Temporary
   const { signMessageAsync } = useSignMessage();
   const { signTypedDataAsync } = useSignTypedData();
+  const { sendTransactionAsync } = useSendTransaction();
 
   const removeSearchParams = () => {
     router.navigate({ search: {}, to: "/dashboard/wc" });
@@ -154,10 +163,35 @@ export const useWalletConnect = () => {
     });
   };
 
+  const sendTx = async () => {
+    if (!wcStore.walletKit) {
+      throw new Error("WalletKit not initialized");
+    }
+    if (!modalStore.currentRequest) {
+      throw new Error("Sign request not found");
+    }
+    const request = parseSendTransactionRequest(modalStore.currentRequest);
+    const now = Math.floor(Date.now() / 1000);
+    if (request.expiryTimestamp && now > request.expiryTimestamp) {
+      throw new Error("Request expired");
+    }
+    const hash = await sendTransactionAsync({
+      data: request.params.data,
+      to: request.params.to,
+      value: hexToBigInt(request.params.value ?? "0x0"),
+    });
+    const res = formatJsonRpcResult(request.id, hash);
+    await wcStore.walletKit.respondSessionRequest({
+      response: res,
+      topic: modalStore.currentRequest.topic,
+    });
+  };
+
   return {
     acceptPendingProposal,
     handleRedirect,
     removeSearchParams,
+    sendTx,
     signMessage,
     signTypedData,
     ...wcStore,

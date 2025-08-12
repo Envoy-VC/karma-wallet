@@ -44,6 +44,8 @@ export const useWalletConnectEvents = (initialized: boolean) => {
         setActiveScreen("sign-message");
       } else if (request.method === "eth_signTypedData_v4") {
         setActiveScreen("sign-typed-data");
+      } else if (request.method === "eth_sendTransaction") {
+        setActiveScreen("send-tx");
       }
     },
     [setActiveScreen, setCurrentRequest, setCurrentSession, walletKit],

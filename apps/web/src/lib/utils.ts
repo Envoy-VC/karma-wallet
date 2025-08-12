@@ -89,6 +89,33 @@ export const parseSignTypedDataRequest = (
   };
 };
 
+interface TransactionRequest {
+  from: Hex;
+  to: Hex;
+  value?: Hex;
+  gas?: Hex;
+  data?: Hex;
+}
+
+export const parseSendTransactionRequest = (
+  sessionRequest: SignClientTypes.EventArguments["session_request"],
+) => {
+  const { id, params } = sessionRequest;
+  const { chainId, request } = params;
+  const calls = request.params as TransactionRequest[];
+  // biome-ignore lint/style/noNonNullAssertion: safe
+  const txData = calls[0]!;
+  return {
+    chainId,
+    expiryTimestamp: request.expiryTimestamp,
+    id,
+    method: request.method as "eth_sendTransaction",
+    params: {
+      ...txData,
+    },
+  };
+};
+
 export const parseSession = (session: SessionTypes.Struct | undefined) => {
   const name = session?.peer.metadata.name ?? "Instadapp";
   const url = session?.peer.metadata.url ?? "http://localhost:3000";

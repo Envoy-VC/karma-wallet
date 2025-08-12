@@ -5,6 +5,7 @@ import {
   ConnectScreen,
   DappConnectScreen,
   DefaultScreen,
+  SendTxScreen,
   SignMessageScreen,
   SignTypedDataScreen,
 } from "./screens";
@@ -21,6 +22,8 @@ const Comp = () => {
     return <SignMessageScreen />;
   } else if (activeScreen === "sign-typed-data") {
     return <SignTypedDataScreen />;
+  } else if (activeScreen === "send-tx") {
+    return <SendTxScreen />;
   }
 
   return <DefaultScreen />;
