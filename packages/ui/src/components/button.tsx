@@ -66,6 +66,7 @@ type ButtonProps = ComponentProps<"button"> &
     animateKey?: string;
     icon?: ReactNode;
     iconKey?: string;
+    innerCls?: string;
   };
 
 function Button({
@@ -77,6 +78,7 @@ function Button({
   animateKey,
   icon,
   iconKey,
+  innerCls,
   ...props
 }: ButtonProps) {
   const measureRef = useRef<HTMLDivElement>(null);
@@ -129,6 +131,7 @@ function Button({
       <AnimatePresence initial={false} mode="wait">
         <motion.div
           animate={{ opacity: 1, x: 0 }}
+          className={innerCls}
           exit={{ opacity: 0, x: -15 }}
           initial={{ opacity: 0, x: 15 }}
           key={animateKey}

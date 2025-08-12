@@ -21,8 +21,8 @@ function WalletConnectPage() {
   });
 
   return (
-    <div className="h-full">
-      <div className="translate-y-1/4 md:translate-y-1/2">
+    <div className="relative h-full border">
+      <div className="absolute top-[10%] right-1/2 translate-x-1/2">
         <WalletConnectCard />
       </div>
     </div>

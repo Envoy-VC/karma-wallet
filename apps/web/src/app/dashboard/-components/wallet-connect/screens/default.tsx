@@ -1,70 +1,88 @@
-import { useState } from "react";
-
 import { Button } from "@karma-wallet/ui/components/button";
-import { Input } from "@karma-wallet/ui/components/input";
-import { ScanIcon } from "@karma-wallet/ui/icons";
-import { Scanner } from "@yudiel/react-qr-scanner";
+import { KarmaLogo } from "@karma-wallet/ui/icons";
+import { Link } from "@tanstack/react-router";
+import {
+  ExternalLinkIcon,
+  FuelIcon,
+  GlobeIcon,
+  TargetIcon,
+} from "lucide-react";
 
-import { QrScannerOverlay } from "@/components";
+import { useWalletConnect } from "@/hooks";
 
 export const DefaultScreen = () => {
-  const [isScanning, setIsScanning] = useState(false);
-  const [connectionString, setConnectionString] = useState("");
+  const { setActiveScreen } = useWalletConnect();
 
   return (
-    <div className="mx-auto w-full max-w-xs space-y-2">
-      <div className="pb-2 text-center font-medium text-2xl text-neutral-600">
-        Connect
-      </div>
-      {isScanning ? (
-        <div className="relative flex aspect-square w-full items-center justify-center rounded-[2.125rem] border-2 border-primary">
-          <QrScannerOverlay
-            borderColor="var(--primary)"
-            borderWidth={2}
-            glowLength={20}
-            holeRadius={20}
-            holeSize={180}
-            lineThickness={4}
-            minMargin={32}
-            outerRadius={32}
-            overlayOpacity={0.65}
-          />
-          <Scanner
-            classNames={{
-              container: "aspect-square w-full rounded-[2rem] !z-[1]",
-              video: "rounded-[2rem]  !z-[1]",
-            }}
-            components={{
-              finder: false,
-            }}
-            onScan={(res) => {
-              const first = res[0];
-              if (!first) return;
-              setConnectionString(first.rawValue);
-              setIsScanning(false);
-            }}
-          />
+    <div>
+      <div className="flex flex-row items-start gap-2 border-neutral-300 border-b p-4 text-primary">
+        <div className="flex size-10 items-center justify-center rounded-full">
+          <KarmaLogo className="size-8" fill="currentColor" />
         </div>
-      ) : (
-        <div className="flex aspect-square w-full items-center justify-center rounded-[2rem] border-2 border-primary border-dashed">
-          <div className="flex flex-col items-center gap-4">
-            <ScanIcon className="size-16 text-primary" strokeWidth={1.5} />
-            <Button onClick={() => setIsScanning(true)}>Scan QR</Button>
+        <div className="flex flex-col gap-1">
+          <div className="font-medium text-neutral-700 text-xl">
+            Welcome to Karma Wallet
+          </div>
+          <div className="font-medium text-neutral-400 text-sm">
+            Save on every transaction.
           </div>
         </div>
-      )}
-      <div className="flex flex-row items-center gap-2 text-zinc-400">
-        <div className="w-full rounded-2xl border border-zinc-300" />
-        <div className="font-medium">OR</div>
-        <div className="w-full rounded-2xl border border-zinc-300" />
       </div>
-      <Input
-        className="!rounded-lg"
-        onChange={(e) => setConnectionString(e.target.value)}
-        placeholder="wc:bed21aa4c..."
-        value={connectionString}
-      />
-      <Button className="w-full">Connect</Button>
+      <div className="space-y-4 border-neutral-300 border-b p-4">
+        <div className="flex w-full flex-row items-start gap-2">
+          <div className="flex size-8 min-h-8 min-w-8 items-center justify-center rounded-full bg-primary/10">
+            <GlobeIcon className="size-4 text-primary" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="font-medium text-base">Control using your EOA</div>
+            <div className="font-medium text-neutral-400 text-xs">
+              Your Karma Smart Wallet will be controlled by your EOA which
+              supports al EVM chains.
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-row items-start gap-2">
+          <div className="flex size-8 min-h-8 min-w-8 items-center justify-center rounded-full bg-primary/10">
+            <FuelIcon className="size-4 text-primary" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="font-medium text-base">
+              Save on every transaction
+            </div>
+            <div className="font-medium text-neutral-400 text-xs">
+              Every Transaction the Smart Account will save to the nearest Gas
+              fees used by the Network.
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-row items-start gap-2">
+          <div className="flex size-8 min-h-8 min-w-8 items-center justify-center rounded-full bg-primary/10">
+            <TargetIcon className="size-4 text-primary" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="font-medium text-base">Create Goals</div>
+            <div className="font-medium text-neutral-400 text-xs">
+              Create Goals and targets for your savings and track your progress.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-1 p-4">
+        <Button
+          className="!rounded-full w-full"
+          onClick={() => {
+            setActiveScreen("connect");
+          }}
+        >
+          Connect
+        </Button>
+        <Button className="mx-auto text-sm" variant="link">
+          <Link className="flex flex-row items-center gap-2" to="/">
+            Learn more about Karma Wallet
+            <ExternalLinkIcon className="size-4" />
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 };
