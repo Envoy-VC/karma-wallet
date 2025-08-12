@@ -3,6 +3,7 @@ import { Entity } from "dexie";
 import type { KarmaDB } from "./index";
 
 export class Goal extends Entity<KarmaDB> {
+  id!: string;
   account!: string;
   emoji!: string;
   name!: string;
@@ -10,15 +11,30 @@ export class Goal extends Entity<KarmaDB> {
   currentAmount!: number;
   category!: string;
   note!: string | undefined;
+  isDefault!: boolean;
   _createdAt!: Date;
   _updatedAt!: Date;
 
   async addAmount(amount: number) {
-    await this.db.goals.update(this.account, (goal) => {
+    await this.db.goals.update(this.id, (goal) => {
       if (goal.currentAmount + amount > goal.targetAmount) {
         // TODO: Think about this case
       }
       goal.currentAmount += amount;
+    });
+  }
+
+  async toggleIsDefault() {
+    const defaultGoal = (await this.db.goals.toArray()).filter(
+      (g) => g.isDefault,
+    );
+
+    for (const goal of defaultGoal) {
+      await this.db.goals.update(goal.id, { isDefault: false });
+    }
+
+    await this.db.goals.update(this.id, {
+      isDefault: !this.isDefault,
     });
   }
 }

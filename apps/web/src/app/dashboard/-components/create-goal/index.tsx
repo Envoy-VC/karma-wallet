@@ -79,10 +79,12 @@ export const CreateGoalForm = () => {
     await db.goals.add({
       _createdAt: new Date(),
       _updatedAt: new Date(),
-      account: address ?? undefined,
+      account: address ?? "0x0",
       category: data.category,
       currentAmount: data.currentAmount,
       emoji: data.icon,
+      id: crypto.randomUUID(),
+      isDefault: false,
       name: data.goal,
       note: data.note,
       targetAmount: data.targetAmount,

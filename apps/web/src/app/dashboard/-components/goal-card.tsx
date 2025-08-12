@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 
+import { Button } from "@karma-wallet/ui/components/button";
+import { StarIcon } from "lucide-react";
 import Random from "rand-seed";
 
 import type { Goal } from "@/db/goal";
@@ -47,14 +49,29 @@ export const GoalCard = ({ goal }: GoalCardProps) => {
         border: `1px solid ${color}`,
       }}
     >
-      <div
-        className="absolute top-2 right-2 rounded-xl px-2 py-1 font-medium text-secondary-foreground text-xs"
-        style={{
-          backgroundColor: `${color}60`,
-          border: `1px solid ${color}`,
-        }}
-      >
-        {goal.category}
+      <div className="absolute top-2 right-2 flex flex-row items-center gap-1">
+        <div
+          className="rounded-xl px-2 py-1 font-medium text-secondary-foreground text-xs"
+          style={{
+            backgroundColor: `${color}60`,
+            border: `1px solid ${color}`,
+          }}
+        >
+          {goal.category}
+        </div>
+        <Button
+          className=""
+          onClick={async () => {
+            await goal.toggleIsDefault();
+          }}
+          size="icon"
+          variant="link"
+        >
+          <StarIcon
+            className="size-4"
+            style={{ color, fill: goal.isDefault ? color : "transparent" }}
+          />
+        </Button>
       </div>
       <div className="flex flex-row items-center gap-2">
         <div className="text-3xl">{goal.emoji}</div>

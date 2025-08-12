@@ -3,8 +3,7 @@ import { cn } from "@karma-wallet/ui/lib/utils";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 
-import { db } from "@/db";
-import { useSmartAccount } from "@/hooks";
+import { listAllGoals } from "@/db";
 
 import { GoalCard } from "../-components/goal-card";
 
@@ -13,10 +12,7 @@ export const Route = createFileRoute("/dashboard/goals/")({
 });
 
 function GoalsPage() {
-  const { address } = useSmartAccount();
-  const goals = useLiveQuery(
-    async () => await db.goals.where({ account: address }).toArray(),
-  );
+  const goals = useLiveQuery(listAllGoals);
   return (
     <div className="mx-auto h-full max-w-screen-lg py-8">
       <div className="flex flex-row items-center justify-between gap-2">
