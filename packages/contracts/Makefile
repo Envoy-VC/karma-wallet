@@ -1,0 +1,101 @@
+# Load environment variables (e.g., RPC urls, keys)
+-include .env
+
+TEST_ARGS=
+DEPLOY_ARGS=
+ACCOUNT_NAME=deployWallet
+
+# Default target
+.DEFAULT_GOAL := help
+#######################
+### Core Operations ###
+#######################
+
+# Clean and build
+build:
+	@echo "🔨 Compiling contracts..."
+	forge build
+
+# Run all tests (unit + fuzz + invariant)
+test:
+	@echo "🧪 Running all tests..."
+	forge test -vv $(TEST_ARGS)
+
+# Run only fuzz tests
+fuzz:
+	@echo "🎲 Fuzz & invariant tests..."
+	forge test --match-path "test/fuzz/*" -vv $(TEST_ARGS)
+
+# Format & lint
+fmt:
+	@echo "🧹 Formatting code..."
+	forge fmt
+
+analyze:
+	@echo "🔍 Analyzing code..."
+	slither .
+
+#########################
+### Deployment Options ###
+#########################
+
+# Default deploy (anvil or testnet/mainnet via ARGS)
+deploy:
+	@echo "🚀 Deploying"
+	forge script script/Deploy.s.sol:Deploy --broadcast $(DEPLOY_ARGS)
+
+deploy-anvil:
+	@echo "🚀 Deploying to local anvil..."
+	forge script script/Deploy.s.sol:Deploy --rpc-url http://127.0.0.1:8545 --broadcast
+
+deploy-morph-testnet:
+	@echo "🚀 Deploying to Morph Holesky Testnet..."
+	if [ -z "$MORPH_HOLESKY_RPC_URL" ]; then \
+		echo "⚠️ Morph Holesky RPC Url is not set. Set MORPH_HOLESKY_RPC_URL in .env file."; \
+		exit 1; \
+	fi
+	forge script script/DeployMorphTestnet.s.sol:DeployMorphTestnet --rpc-url $(MORPH_HOLESKY_RPC_URL)  --account $(ACCOUNT_NAME) --broadcast --verify --verifier blockscout --verifier-url https://explorer-holesky.morphl2.io/api/ -vvvv
+
+deploy-sepolia:
+	@echo "🚀 Deploying to Sepolia..."
+	if [ -z "$SEPOLIA_RPC_URL" ]; then \
+		echo "⚠️ Sepolia RPC Url is not set. Set SEPOLIA_RPC_URL in .env file."; \
+		exit 1; \
+	fi
+	if [ -z "$ETHERSCAN_API_KEY" ]; then \
+		echo "⚠️ Etherscan API key is not set. Set ETHERSCAN_API_KEY in .env file."; \
+		exit 1; \
+	fi
+	forge script script/DeploySepolia.s.sol:DeploySepolia --rpc-url $(SEPOLIA_RPC_URL)  --account $(ACCOUNT_NAME) --broadcast --verify --etherscan-api-key $(ETHERSCAN_API_KEY) -vvvv
+
+###################
+### Diagnostics ###
+###################
+
+gas-report:
+	@echo "💰 Generating gas usage report..."
+	forge test --gas-report
+
+clean:
+	@echo "🧼 Cleaning generated files..."
+	forge clean
+	rm -rf out cache
+
+###################
+### Help Section ###
+###################
+help:
+	@echo "Usage:"
+	@echo "  make build                  - Compile contracts"
+	@echo "  make test                   - Run full test suite"
+	@echo "  make fuzz                   - Run fuzz tests"
+	@echo "  make fmt                    - Format code"
+	@echo "  make analyze                - Run static analysis"
+	@echo "  make deploy                 - Deploy with args"
+	@echo "  make deploy-anvil           - Deploy locally"
+	@echo "  make deploy-sepolia         - Deploy to ethereum sepolia"
+	@echo "  make deploy-morph-testnet   - Deploy to morph testnet"
+	@echo "  make gas-report             - Capture gas costs"
+	@echo "  make clean                  - Clean build artifacts"
+
+.PHONY: build test fuzz fmt lint deploy deploy-anvil deploy-morph-testnet deploy-sepolia gas-report clean help
