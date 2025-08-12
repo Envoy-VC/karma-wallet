@@ -415,6 +415,16 @@ export const JAR_ABI = [
   },
   {
     inputs: [
+      { internalType: "uint256", name: "totalGasSpent", type: "uint256" },
+      { internalType: "uint256", name: "totalTip", type: "uint256" },
+    ],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
       { internalType: "address", name: "", type: "address" },
       { internalType: "address", name: "", type: "address" },
       { internalType: "uint256[]", name: "", type: "uint256[]" },
@@ -502,16 +512,20 @@ export const JAR_ABI = [
   {
     anonymous: false,
     inputs: [
-      { indexed: true, internalType: "address", name: "from", type: "address" },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
       {
         indexed: false,
         internalType: "uint256",
         name: "amount",
         type: "uint256",
       },
-      { indexed: false, internalType: "string", name: "via", type: "string" },
     ],
-    name: "ReceivedETH",
+    name: "Withdraw",
     type: "event",
   },
   { inputs: [], name: "FailedToSendEther", type: "error" },

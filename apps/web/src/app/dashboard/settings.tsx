@@ -1,4 +1,5 @@
 import { Button } from "@karma-wallet/ui/components/button";
+import { useAppKit } from "@reown/appkit/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CopyIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/dashboard/settings")({
 function RouteComponent() {
   const { address } = useAccount();
   const { address: karmaAddress } = useSmartAccount();
+  const { open } = useAppKit();
   return (
     <div className="mx-auto h-full max-w-screen-lg py-8">
       <div className="font-medium text-3xl">Settings</div>
@@ -36,19 +38,31 @@ function RouteComponent() {
         </div>
         <div className="flex w-full flex-row items-center justify-between font-medium">
           <div className="text-lg">Connected Wallet</div>
-          <Button
-            className="h-8 rounded-full text-neutral-500"
-            onClick={async () => {
-              await navigator.clipboard.writeText(address ?? "");
-              toast.success("Copied to clipboard");
-            }}
-            variant="outline"
-          >
-            <div className="flex flex-row items-center gap-2">
-              <div>{truncateEthAddress(address)}</div>
-              <CopyIcon className="size-5 cursor-pointer text-neutral-500" />
-            </div>
-          </Button>
+          {address ? (
+            <Button
+              className="h-8 rounded-full text-neutral-500"
+              onClick={async () => {
+                await navigator.clipboard.writeText(address ?? "");
+                toast.success("Copied to clipboard");
+              }}
+              variant="outline"
+            >
+              <div className="flex flex-row items-center gap-2">
+                <div>{truncateEthAddress(address)}</div>
+                <CopyIcon className="size-5 cursor-pointer text-neutral-500" />
+              </div>
+            </Button>
+          ) : (
+            <Button
+              className="h-8 rounded-full text-neutral-500"
+              onClick={() => {
+                open();
+              }}
+              variant="outline"
+            >
+              Connect Wallet
+            </Button>
+          )}
         </div>
       </div>
     </div>
