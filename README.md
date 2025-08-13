@@ -6,6 +6,8 @@ For example, if your transaction gas fee is $0.087, Karma Wallet will round it u
 
 Powered by ERC-4337 smart accounts, Karma Wallet seamlessly integrates this tipping logic into your wallet’s transaction flow without requiring any additional user action.
 
+---
+
 ## 🎯 Motive
 
 Gas fees are a necessary part of using the blockchain, but they’re often odd amounts that leave “dust” in the wallet. Karma Wallet turns these small amounts into meaningful contributions:
@@ -15,6 +17,8 @@ Gas fees are a necessary part of using the blockchain, but they’re often odd a
 - Gamify generosity by making every transaction part of a bigger giving story.
 
 Instead of letting your micro-ETH fragments sit idle, they get converted into micro-donations.
+
+---
 
 ## ⚙️ How It Works — Detailed UserOperation Flow
 
@@ -84,6 +88,8 @@ function _calculateTip(uint256 gasUsed) internal view returns (uint256) {
 - `_calculateTip(gasUsed)` converts gas used into USD value and determines the rounded-up tip.
 - If the wallet has enough ETH to cover the tip, it’s sent to the _jar contract.
 
+---
+
 ## 📍 Contract Addresses
 
 | Contract | Chain | Address |
@@ -143,6 +149,8 @@ pnpm build
 npx local-cors-proxy --proxyUrl http://localhost:4337
 ```
 
+---
+
 ## 🔮 Future — Modular Safe Account with Hooks
 
 The current Karma Wallet is a modified SimpleSmartAccount, but future plans include:
@@ -154,6 +162,10 @@ The current Karma Wallet is a modified SimpleSmartAccount, but future plans incl
 - Supporting multi-recipient tips (split between multiple causes).
 - Integrating Paymaster sponsorship for gasless tip donations.
 
+---
+
 ## 📝 License
 
 The Karma Wallet is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+---
