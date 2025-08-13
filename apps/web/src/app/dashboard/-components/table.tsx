@@ -59,7 +59,7 @@ export const columns: ColumnDef<DepositEvent>[] = [
             <CopyIcon className="size-4 text-neutral-500" />
           </Button>
           <a
-            href={`https://sepolia.etherscan.io/tx/${txHash}`}
+            href={`https://explorer-holesky.morphl2.io/tx/${txHash}`}
             rel="noreferrer"
             target="_blank"
           >

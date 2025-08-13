@@ -61,8 +61,8 @@ export const useWalletConnect = () => {
       throw new Error("No pending proposal found");
     }
 
-    const eipChains = chains.map((c) => `eip155:11155111`);
-    const eipAccounts = chains.map((c) => `eip155:11155111:${address}`);
+    const eipChains = chains.map((c) => `eip155:${c.id}`);
+    const eipAccounts = chains.map((c) => `eip155:${c.id}:${address}`);
 
     const approvedNamespaces = buildApprovedNamespaces({
       proposal: modalStore.pendingProposal.params,
