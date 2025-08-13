@@ -4,6 +4,7 @@ import { FuelIcon, HandCoinsIcon } from "lucide-react";
 
 import { getLastWeekStatistics } from "@/db";
 import { useBalances } from "@/hooks";
+import { humanizeNumber } from "@/lib/utils";
 
 import { DashboardCard, SavingsTable, WeeklySavingsChart } from "./-components";
 
@@ -37,7 +38,7 @@ function DashboardPage() {
             value: stats?.totalGasSpent.change ?? 0,
           }}
           title="Total Gas Spent"
-          value={`${stats?.totalGasSpent.gwei ?? 0} Gwei`}
+          value={`${humanizeNumber(stats?.totalGasSpent.wei ?? 0)} wei`}
         />
         <DashboardCard
           color="#FDE68A"
@@ -47,7 +48,7 @@ function DashboardPage() {
             value: stats?.totalSavings.change ?? 0,
           }}
           title="Total Gas Saved"
-          value={`${stats?.totalSavings.gwei ?? 0} Gwei`}
+          value={`${humanizeNumber(stats?.totalSavings.gwei ?? 0)} Gwei`}
         />
       </div>
       <WeeklySavingsChart />

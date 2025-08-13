@@ -40,10 +40,10 @@ export const TokenAddress = {
   },
 } as const;
 
-// export const ContractAddress = {
-//   karamaccountFactory: "0x8F54dbbA4eaD629c98a117a27F154831345C8Eaa",
-//   pythAdaptor: "0x0f583d4466B87902d41f814bdD5089407C862D14",
-// } as const;
+export const ContractAddress = {
+  karamaccountFactory: "0xe2567b2a7214877d395dfa6ca72335644b26dc23",
+  pythAdaptor: "0x2ca12ac2cb30b9acbdb6d9c7dcfc895338904a93",
+} as const;
 
 // Anvil Contracts
 // export const ContractAddress = {
@@ -52,7 +52,7 @@ export const TokenAddress = {
 // } as const;
 
 // Sepolia Contracts
-export const ContractAddress = {
-  karamaccountFactory: "0x6E85056eb08D248Ee516bE85818EE5a4ca0b0223",
-  pythAdaptor: "0x963288C37c071c603Bfa766EEd1B81e2C8825069",
-} as const;
+// export const ContractAddress = {
+//   karamaccountFactory: "0x6E85056eb08D248Ee516bE85818EE5a4ca0b0223",
+//   pythAdaptor: "0x963288C37c071c603Bfa766EEd1B81e2C8825069",
+// } as const;

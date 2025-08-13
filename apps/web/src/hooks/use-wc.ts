@@ -6,13 +6,7 @@ import { useRouter } from "@tanstack/react-router";
 import type { SessionTypes } from "@walletconnect/types";
 import { buildApprovedNamespaces } from "@walletconnect/utils";
 import { hexToBigInt } from "viem";
-import {
-  useAccount,
-  useChains,
-  useSendTransaction,
-  useSignMessage,
-  useSignTypedData,
-} from "wagmi";
+import { useChains } from "wagmi";
 import { create } from "zustand";
 
 import { useWcModalStore } from "@/lib/stores";
@@ -21,6 +15,8 @@ import {
   parseSignMessageRequest,
   parseSignTypedDataRequest,
 } from "@/lib/utils";
+
+import { useSmartAccount } from "./use-account";
 
 // import { useSmartAccount } from "./use-account";
 
@@ -43,13 +39,7 @@ export const useWalletConnect = () => {
   const wcStore = useWalletConnectStore();
   const modalStore = useWcModalStore();
   const chains = useChains();
-  // const { address } = useSmartAccount();
-  const { address } = useAccount();
-
-  // TODO: Temporary
-  const { signMessageAsync } = useSignMessage();
-  const { signTypedDataAsync } = useSignTypedData();
-  const { sendTransactionAsync } = useSendTransaction();
+  const { address, getClient } = useSmartAccount();
 
   const removeSearchParams = () => {
     router.navigate({ search: {}, to: "/dashboard/wc" });
@@ -133,9 +123,14 @@ export const useWalletConnect = () => {
     if (request.expiryTimestamp && now > request.expiryTimestamp) {
       throw new Error("Request expired");
     }
-    const signature = await signMessageAsync({
+    const sa = await getClient();
+    if (!sa) {
+      throw new Error("Smart Account not found");
+    }
+    const signature = await sa.signMessage({
       message: { raw: request.params.message },
     });
+
     const res = formatJsonRpcResult(request.id, signature);
     await wcStore.walletKit.respondSessionRequest({
       response: res,
@@ -155,7 +150,11 @@ export const useWalletConnect = () => {
     if (request.expiryTimestamp && now > request.expiryTimestamp) {
       throw new Error("Request expired");
     }
-    const signature = await signTypedDataAsync(request.params.data);
+    const sa = await getClient();
+    if (!sa) {
+      throw new Error("Smart Account not found");
+    }
+    const signature = await sa.signTypedData(request.params.data);
     const res = formatJsonRpcResult(request.id, signature);
     await wcStore.walletKit.respondSessionRequest({
       response: res,
@@ -175,7 +174,12 @@ export const useWalletConnect = () => {
     if (request.expiryTimestamp && now > request.expiryTimestamp) {
       throw new Error("Request expired");
     }
-    const hash = await sendTransactionAsync({
+    const sa = await getClient();
+    if (!sa) {
+      throw new Error("Smart Account not found");
+    }
+    const hash = await sa.sendTransaction({
+      callGasLimit: BigInt(100_000),
       data: request.params.data,
       to: request.params.to,
       value: hexToBigInt(request.params.value ?? "0x0"),

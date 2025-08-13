@@ -506,7 +506,7 @@ export const JAR_ABI = [
         type: "uint256",
       },
     ],
-    name: "Deposit",
+    name: "DepositTip",
     type: "event",
   },
   {
@@ -525,7 +525,7 @@ export const JAR_ABI = [
         type: "uint256",
       },
     ],
-    name: "Withdraw",
+    name: "WithdrawTip",
     type: "event",
   },
   { inputs: [], name: "FailedToSendEther", type: "error" },

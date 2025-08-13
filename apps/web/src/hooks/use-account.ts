@@ -70,7 +70,9 @@ export const useSmartAccount = () => {
       logs: receipt?.logs ?? [],
     });
 
-    const depositLog = parsed.filter((e) => e.eventName === "Deposit")[0];
+    const depositLog = parsed.filter((e) => e.eventName === "DepositTip")[0];
+
+    console.log(depositLog);
     if (depositLog) {
       console.log("Adding Deposit");
       await db.deposits.add({
@@ -97,6 +99,8 @@ export const useSmartAccount = () => {
 
   return {
     address: address as Hex | null,
+    getClient,
+    postTransaction,
     sendEth,
   };
 };

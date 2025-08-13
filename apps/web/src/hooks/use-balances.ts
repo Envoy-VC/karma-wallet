@@ -74,7 +74,7 @@ export const useBalances = () => {
     const usdcDecimals = tokenBalances?.[4].result ?? 18;
     const usdtDecimals = tokenBalances?.[5].result ?? 18;
 
-    const ethPrice = Number(tokenBalances?.[6].result ?? 0) / 10 ** 18;
+    const ethPrice = 4600;
 
     return {
       dai: {

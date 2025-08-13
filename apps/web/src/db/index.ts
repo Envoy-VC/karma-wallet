@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from "dexie";
 
-import { weiToUsd } from "@/lib/utils";
+import { weiToGwei, weiToUsd } from "@/lib/utils";
 
 import { Deposit } from "./deposit";
 import { Goal } from "./goal";
@@ -79,7 +79,8 @@ export const getLastWeekStatistics = async (ethPriceUsd: number) => {
 
   // Convert Wei to USD
   const lastWeekGasSpentUsd = weiToUsd(lastWeekTotalGasSpent, ethPriceUsd);
-  const lastWeekTipUsd = weiToUsd(lastWeekTotalTip, ethPriceUsd);
+  const lastWeekTipUsd = weiToUsd(lastWeekTotalTip, ethPriceUsd, 4);
+  console.log("lastWeekTipUsd", lastWeekTipUsd);
 
   const lastLastWeekGasSpentUsd = weiToUsd(
     lastLastWeekTotalGasSpent,
@@ -160,9 +161,9 @@ export const getLastWeekChartData = async () => {
 
     return {
       date,
-      gasSaved: totalTip,
-      gasSpent: totalGasSpent,
-      total: total,
+      gasSaved: weiToGwei(totalTip),
+      gasSpent: weiToGwei(totalGasSpent),
+      total: weiToGwei(total),
     };
   });
 

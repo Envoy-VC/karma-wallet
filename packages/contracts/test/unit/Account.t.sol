@@ -47,7 +47,7 @@ contract CounterUnitTest is Test, SetUp {
 
         // Testing Event Emit
         vm.expectEmit(true, false, false, true);
-        emit Jar.Deposit(address(account), 34723, 3055400000000, 1);
+        emit Jar.DepositTip(address(account), 34723, 3055400000000, 1);
 
         account.execute(accounts.user.addr, 1 ether, data);
         uint256 gasPost = gasleft();
@@ -80,7 +80,7 @@ contract CounterUnitTest is Test, SetUp {
 
         // Testing Withdraw Emit
         vm.expectEmit(true, false, false, true);
-        emit Jar.Withdraw(address(owner), 3055400000000);
+        emit Jar.WithdrawTip(address(owner), 3055400000000);
 
         account._jar().withdraw(tipJarBalance, owner);
 

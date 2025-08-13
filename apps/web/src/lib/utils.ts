@@ -135,6 +135,10 @@ export const weiToUsd = (
   return Number(usd.toFixed(precision ?? 4));
 };
 
+export const weiToGwei = (wei: number) => {
+  return wei / 10 ** 9;
+};
+
 export const humanizeNumber = (num: number) => {
   // format for k,M,B
   const lookup = [

@@ -11,8 +11,8 @@ contract Jar is TokenCallbackHandler {
     error FailedToSendEther();
     error OnlySmartAccountOwner();
 
-    event Deposit(address indexed sender, uint256 totalGasSpent, uint256 totalTip, uint256 timestamp);
-    event Withdraw(address indexed recipient, uint256 amount);
+    event DepositTip(address indexed sender, uint256 totalGasSpent, uint256 totalTip, uint256 timestamp);
+    event WithdrawTip(address indexed recipient, uint256 amount);
 
     KarmaAccount public _account;
 
@@ -31,7 +31,7 @@ contract Jar is TokenCallbackHandler {
     fallback() external payable {}
 
     function deposit(uint256 totalGasSpent, uint256 totalTip) public payable {
-        emit Deposit(msg.sender, totalGasSpent, totalTip, block.timestamp);
+        emit DepositTip(msg.sender, totalGasSpent, totalTip, block.timestamp);
     }
 
     function withdraw(uint256 amount, address recipient) public onlyAccountOwner {
@@ -44,6 +44,6 @@ contract Jar is TokenCallbackHandler {
             revert FailedToSendEther();
         }
 
-        emit Withdraw(recipient, amount);
+        emit WithdrawTip(recipient, amount);
     }
 }
