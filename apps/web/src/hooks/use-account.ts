@@ -7,8 +7,9 @@ import { http, usePublicClient, useWalletClient } from "wagmi";
 
 import { JAR_ABI, KARMA_ACCOUNT_ABI } from "@/data/abi";
 import { ContractAddress } from "@/data/address";
-import { db, getDefaultGoal, weiToUsd } from "@/db";
+import { db, getDefaultGoal } from "@/db";
 import { env } from "@/env";
+import { weiToUsd } from "@/lib/utils";
 import { chain, pimlicoClient } from "@/lib/wagmi";
 
 import { useBalances } from "./use-balances";

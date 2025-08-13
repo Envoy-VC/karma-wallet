@@ -125,3 +125,30 @@ export const parseSession = (session: SessionTypes.Struct | undefined) => {
   const description = session?.peer.metadata.description ?? "No description";
   return { description, icon, name, url };
 };
+
+export const weiToUsd = (
+  wei: number,
+  ethPriceUsd: number,
+  precision?: number,
+) => {
+  const usd = (wei * ethPriceUsd) / 10 ** 18;
+  return Number(usd.toFixed(precision ?? 4));
+};
+
+export const humanizeNumber = (num: number) => {
+  // format for k,M,B
+  const lookup = [
+    { symbol: "", value: 1 },
+    { symbol: "k", value: 1e3 },
+    { symbol: "M", value: 1e6 },
+    { symbol: "B", value: 1e9 },
+  ];
+  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  const item = lookup
+    .slice()
+    .reverse()
+    .find((item) => num >= item.value);
+  return item
+    ? (num / item.value).toFixed(2).replace(rx, "$1") + item.symbol
+    : "0";
+};

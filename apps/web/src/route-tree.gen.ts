@@ -14,7 +14,6 @@ import { Route as DashboardGoalsCreateRouteImport } from "./app/dashboard/goals/
 import { Route as DashboardGoalsIndexRouteImport } from "./app/dashboard/goals/index";
 import { Route as DashboardIndexRouteImport } from "./app/dashboard/index";
 import { Route as DashboardRouteRouteImport } from "./app/dashboard/route";
-import { Route as DashboardSavingsRouteImport } from "./app/dashboard/savings";
 import { Route as DashboardSendIndexRouteImport } from "./app/dashboard/send/index";
 import { Route as DashboardSettingsRouteImport } from "./app/dashboard/settings";
 import { Route as DashboardWcRouteImport } from "./app/dashboard/wc";
@@ -50,11 +49,6 @@ const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: "/settings",
   path: "/settings",
 } as any);
-const DashboardSavingsRoute = DashboardSavingsRouteImport.update({
-  getParentRoute: () => DashboardRouteRoute,
-  id: "/savings",
-  path: "/savings",
-} as any);
 const DashboardSendIndexRoute = DashboardSendIndexRouteImport.update({
   getParentRoute: () => DashboardRouteRoute,
   id: "/send/",
@@ -75,7 +69,6 @@ export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
-  "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
   "/dashboard/wc": typeof DashboardWcRoute;
   "/dashboard/": typeof DashboardIndexRoute;
@@ -86,7 +79,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
   "/create": typeof CreateRoute;
-  "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
   "/dashboard/wc": typeof DashboardWcRoute;
   "/dashboard": typeof DashboardIndexRoute;
@@ -99,7 +91,6 @@ export interface FileRoutesById {
   "/": typeof IndexRoute;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/create": typeof CreateRoute;
-  "/dashboard/savings": typeof DashboardSavingsRoute;
   "/dashboard/settings": typeof DashboardSettingsRoute;
   "/dashboard/wc": typeof DashboardWcRoute;
   "/dashboard/": typeof DashboardIndexRoute;
@@ -113,7 +104,6 @@ export interface FileRouteTypes {
     | "/"
     | "/dashboard"
     | "/create"
-    | "/dashboard/savings"
     | "/dashboard/settings"
     | "/dashboard/wc"
     | "/dashboard/"
@@ -124,7 +114,6 @@ export interface FileRouteTypes {
   to:
     | "/"
     | "/create"
-    | "/dashboard/savings"
     | "/dashboard/settings"
     | "/dashboard/wc"
     | "/dashboard"
@@ -136,7 +125,6 @@ export interface FileRouteTypes {
     | "/"
     | "/dashboard"
     | "/create"
-    | "/dashboard/savings"
     | "/dashboard/settings"
     | "/dashboard/wc"
     | "/dashboard/"
@@ -195,13 +183,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof DashboardSettingsRouteImport;
       parentRoute: typeof DashboardRouteRoute;
     };
-    "/dashboard/savings": {
-      id: "/dashboard/savings";
-      path: "/savings";
-      fullPath: "/dashboard/savings";
-      preLoaderRoute: typeof DashboardSavingsRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
     "/dashboard/send/": {
       id: "/dashboard/send/";
       path: "/send";
@@ -227,7 +208,6 @@ declare module "@tanstack/react-router" {
 }
 
 interface DashboardRouteRouteChildren {
-  DashboardSavingsRoute: typeof DashboardSavingsRoute;
   DashboardSettingsRoute: typeof DashboardSettingsRoute;
   DashboardWcRoute: typeof DashboardWcRoute;
   DashboardIndexRoute: typeof DashboardIndexRoute;
@@ -240,7 +220,6 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardGoalsCreateRoute: DashboardGoalsCreateRoute,
   DashboardGoalsIndexRoute: DashboardGoalsIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
-  DashboardSavingsRoute: DashboardSavingsRoute,
   DashboardSendIndexRoute: DashboardSendIndexRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardWcRoute: DashboardWcRoute,

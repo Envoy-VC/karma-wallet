@@ -21,6 +21,10 @@ export class Goal extends Entity<KarmaDB> {
     });
   }
 
+  currentAmountFormatted() {
+    return this.currentAmount.toFixed(4);
+  }
+
   async toggleIsDefault() {
     const defaultGoal = (await this.db.goals.toArray()).filter(
       (g) => g.isDefault,

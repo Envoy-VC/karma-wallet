@@ -1,5 +1,7 @@
 import Dexie, { type EntityTable } from "dexie";
 
+import { weiToUsd } from "@/lib/utils";
+
 import { Deposit } from "./deposit";
 import { Goal } from "./goal";
 
@@ -43,10 +45,6 @@ export const getDepositByTxHash = async (txHash: string) => {
 export const listAllDeposits = async () => {
   const deposits = await db.deposits.toArray();
   return deposits;
-};
-
-export const weiToUsd = (wei: number, ethPriceUsd: number) => {
-  return (wei * ethPriceUsd) / 10 ** 18;
 };
 
 export const getLastWeekStatistics = async (ethPriceUsd: number) => {
@@ -114,20 +112,20 @@ export const getLastWeekStatistics = async (ethPriceUsd: number) => {
   return {
     totalGasSpent: {
       change: changeInSpent,
-      gwei: lastWeekTotalGasSpent / 10e9,
+      gwei: Number((lastWeekTotalGasSpent / 10e9).toFixed(2)),
       usd: lastWeekGasSpentUsd,
       wei: lastWeekTotalGasSpent,
     },
     totalSavings: {
       change: changeInTip,
-      gwei: lastWeekTotalTip / 10e9,
+      gwei: Number((lastWeekTotalTip / 10e9).toFixed(2)),
       usd: lastWeekTipUsd,
       wei: lastWeekTotalTip,
     },
   };
 };
 
-export const getLastWeekChartData = async (ethPriceUsd: number) => {
+export const getLastWeekChartData = async () => {
   const now = Math.floor(Date.now() / 1000);
   const lastWeek = now - 60 * 60 * 24 * 7;
 
@@ -136,23 +134,22 @@ export const getLastWeekChartData = async (ethPriceUsd: number) => {
     .above(lastWeek)
     .toArray();
 
-  // Group All deposits by date
-  const groupedDeposits = lastWeekDeposits.reduce(
-    (acc, deposit) => {
-      const date = new Date(deposit.timestamp * 1000)
-        .toISOString()
-        .slice(0, 10);
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(deposit);
-      return acc;
-    },
-    {} as Record<string, Deposit[]>,
-  );
+  const map = new Map<string, Deposit[]>();
 
-  const res = Object.keys(groupedDeposits).map((date) => {
-    const deposits = groupedDeposits[date] ?? [];
+  for (const deposit of lastWeekDeposits) {
+    const key = new Date(deposit.timestamp * 1000).toISOString().slice(0, 10);
+    if (!map.has(key)) {
+      map.set(key, []);
+      // biome-ignore lint/style/noNonNullAssertion: safe
+      map.get(key)!.push(deposit);
+    } else {
+      // biome-ignore lint/style/noNonNullAssertion: safe
+      map.get(key)!.push(deposit);
+    }
+  }
+
+  // Group Deposits by date
+  const res = Array.from(map.entries()).map(([date, deposits]) => {
     const totalGasSpent = deposits.reduce((acc, deposit) => {
       return acc + deposit.totalGasSpent;
     }, 0);
@@ -160,15 +157,14 @@ export const getLastWeekChartData = async (ethPriceUsd: number) => {
       return acc + deposit.totalTip;
     }, 0);
     const total = totalGasSpent + totalTip;
+
     return {
       date,
-      gasSaved: Math.floor(totalTip / 1e9),
-      gasSpent: Math.floor(totalGasSpent / 1e9),
-      total: Math.floor(total / 1e9),
+      gasSaved: totalTip,
+      gasSpent: totalGasSpent,
+      total: total,
     };
   });
-
-  console.log(res);
 
   return res;
 };

@@ -28,41 +28,17 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { ChevronsUpDownIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 import { toast } from "sonner";
 
-import { getLastXDeposits, weiToUsd } from "@/db";
+import { getLastXDeposits } from "@/db";
 import { useBalances } from "@/hooks";
+import { humanizeNumber, weiToUsd } from "@/lib/utils";
 
 type DepositEvent = {
   txHash: string;
   timestamp: number;
-  gasUsed: number;
+  gasUsed: string;
   gasSaved: number;
 };
 
-export const events: DepositEvent[] = [
-  {
-    gasSaved: 12134,
-    gasUsed: 253457,
-    timestamp: 1754832280,
-    txHash:
-      "0x02ea0f4bd9b6b733b195085d453cec1d66e94520ed3fd019761635ad649c26c8",
-  },
-  {
-    gasSaved: 12134,
-    gasUsed: 253457,
-    timestamp: 1754832280,
-    txHash:
-      "0x02ea0f4bd9b6b733b195085d453cec1d66e94520ed3fd019761635ad649c26c8",
-  },
-  {
-    gasSaved: 12134,
-    gasUsed: 253457,
-    timestamp: 1754832280,
-    txHash:
-      "0x02ea0f4bd9b6b733b195085d453cec1d66e94520ed3fd019761635ad649c26c8",
-  },
-];
-
-const ethPrice = 4000;
 export const columns: ColumnDef<DepositEvent>[] = [
   {
     accessorKey: "txHash",
@@ -83,7 +59,7 @@ export const columns: ColumnDef<DepositEvent>[] = [
             <CopyIcon className="size-4 text-neutral-500" />
           </Button>
           <a
-            href={`https://etherscan.io/tx/${txHash}`}
+            href={`https://sepolia.etherscan.io/tx/${txHash}`}
             rel="noreferrer"
             target="_blank"
           >
@@ -149,13 +125,11 @@ export const columns: ColumnDef<DepositEvent>[] = [
   {
     accessorKey: "gasUsed",
     cell: ({ row }) => {
-      const gasUsedGwei = row.getValue("gasUsed") as number;
-      const gasInEth = gasUsedGwei / 1e9;
-      const gasInUsd = gasInEth * ethPrice;
+      const gasUsed = row.getValue("gasUsed") as number;
 
       return (
         <div className="text-center font-medium text-neutral-600">
-          ${gasInUsd.toFixed(2)}
+          {gasUsed} wei
         </div>
       );
     },
@@ -175,13 +149,12 @@ export const columns: ColumnDef<DepositEvent>[] = [
   {
     accessorKey: "gasSaved",
     cell: ({ row }) => {
-      const gasSavedGwei = row.getValue("gasSaved") as number;
-      const gasInEth = gasSavedGwei / 1e9;
-      const gasInUsd = gasInEth * ethPrice;
+      const gasSaved = row.getValue("gasSaved") as number;
+      console.log("gasSaved", gasSaved);
 
       return (
         <div className="text-center font-medium text-neutral-600">
-          ${gasInUsd.toFixed(2)}
+          ${gasSaved}
         </div>
       );
     },
@@ -207,8 +180,8 @@ export const SavingsTable = () => {
   const deposits = useLiveQuery(async () => {
     const res = await getLastXDeposits(7);
     return res.map((d) => ({
-      gasSaved: Number(weiToUsd(d.totalTip, ethPrice)),
-      gasUsed: Number(weiToUsd(d.totalGasSpent, ethPrice)),
+      gasSaved: weiToUsd(d.totalTip, ethPrice),
+      gasUsed: humanizeNumber(d.totalGasSpent),
       timestamp: d.timestamp,
       txHash: d.txHash,
     }));

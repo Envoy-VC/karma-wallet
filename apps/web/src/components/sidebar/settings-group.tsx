@@ -7,12 +7,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@karma-wallet/ui/components/sidebar";
-import { SettingsIcon } from "@karma-wallet/ui/icons";
+import { SettingsIcon, WalletIcon } from "@karma-wallet/ui/icons";
 import { cn } from "@karma-wallet/ui/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 
 const settingsGroupItems = [
+  {
+    href: "/dashboard/wc",
+    icon: WalletIcon,
+    id: "wc",
+    title: "Wallet Connect",
+  },
   {
     href: "/dashboard/settings",
     icon: SettingsIcon,

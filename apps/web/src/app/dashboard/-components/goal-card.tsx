@@ -78,7 +78,7 @@ export const GoalCard = ({ goal }: GoalCardProps) => {
         <div className="flex flex-col">
           <div className="font-medium text-lg">{goal.name}</div>
           <div className="text-neutral-500 text-sm">
-            ${goal.currentAmount} of ${goal.targetAmount}
+            ${goal.currentAmountFormatted()} of ${goal.targetAmount}
           </div>
         </div>
       </div>

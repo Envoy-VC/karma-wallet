@@ -14,23 +14,11 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import { getLastWeekChartData } from "@/db";
-import { useBalances } from "@/hooks";
+import { humanizeNumber } from "@/lib/utils";
 
 export const description = "A stacked bar chart with a legend";
 
-const chartData = [
-  { date: "2024-07-15", gasSaved: 300, gasSpent: 450, total: 850 },
-  { date: "2024-07-16", gasSaved: 420, gasSpent: 380, total: 800 },
-  { date: "2024-07-17", gasSaved: 120, gasSpent: 520, total: 640 },
-  { date: "2024-07-18", gasSaved: 550, gasSpent: 140, total: 690 },
-  { date: "2024-07-19", gasSaved: 350, gasSpent: 600, total: 950 },
-  { date: "2024-07-20", gasSaved: 400, gasSpent: 480, total: 880 },
-];
-
 const chartConfig = {
-  activities: {
-    label: "Savings",
-  },
   gasSaved: {
     color: "var(--chart-2)",
     label: "Gas Saved",
@@ -39,13 +27,13 @@ const chartConfig = {
     color: "var(--chart-1)",
     label: "Gas Spent",
   },
+  savings: {
+    label: "Savings",
+  },
 } satisfies ChartConfig;
 
 export const WeeklySavingsChart = () => {
-  const balances = useBalances();
-  const chartData = useLiveQuery(
-    async () => await getLastWeekChartData(balances.ethPrice),
-  );
+  const chartData = useLiveQuery(async () => await getLastWeekChartData());
 
   return (
     <Card>
@@ -77,7 +65,7 @@ export const WeeklySavingsChart = () => {
               className="hidden md:block"
               dataKey="total"
               tickFormatter={(value) => {
-                return `$${value.toLocaleString()}`;
+                return humanizeNumber(value);
               }}
               tickLine={true}
               tickMargin={10}
@@ -85,18 +73,20 @@ export const WeeklySavingsChart = () => {
             <Bar
               dataKey="gasSpent"
               fill="var(--color-gasSpent)"
+              label="Gas Spent"
               radius={[0, 0, 16, 16]}
               stackId="a"
             />
             <Bar
               dataKey="gasSaved"
               fill="var(--color-gasSaved)"
+              label="Gas Saved"
               radius={[16, 16, 0, 0]}
               stackId="a"
             />
             <ChartTooltip
               content={
-                <ChartTooltipContent indicator="line" labelKey="activities" />
+                <ChartTooltipContent indicator="line" labelKey="savings" />
               }
               cursor={false}
               defaultIndex={1}
