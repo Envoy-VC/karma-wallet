@@ -2,7 +2,6 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@json-rpc-tools/utils": "^1.7.6",
-    "@karma-wallet/ui": "workspace:*",
     "@reown/appkit": "^1.7.19",
     "@reown/appkit-adapter-wagmi": "^1.7.19",
     "@reown/walletkit": "1.2.7",
@@ -38,6 +37,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.1.4",
     "@karma-wallet/config": "workspace:*",
+    "@karma-wallet/ui": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/router-plugin": "^1.131.5",
