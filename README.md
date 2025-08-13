@@ -90,6 +90,49 @@ function _calculateTip(uint256 gasUsed) internal view returns (uint256) {
 
 ---
 
+## Screenshots 📸
+
+<table>
+  <tr>
+    <td valign="top" width="50%">
+      <br>
+      <img src="./assets/1.png" alt="" >
+    </td>
+    <td valign="top" width="50%">
+      <br>
+      <img src="./assets/2.png" alt="" >
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td valign="top" width="50%">
+      <br>
+            <img src="./assets/3.png" alt="" >
+    </td>
+    <td valign="top" width="50%">
+      <br>
+            <img src="./assets/4.png" alt="" >
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td valign="top" width="50%">
+      <br>
+            <img src="./assets/5.png" alt="" >
+    </td>
+    <td valign="top" width="50%">
+      <br>
+            <img src="./assets/6.png" alt="" >
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 📍 Contract Addresses
 
 | Contract | Chain | Address |
@@ -112,10 +155,19 @@ cd alto
 pnpm install
 ```
 
-3. Create Config for Morph Holesky Testnet.
+3. Create Config for Morph Holesky Testnet at `alto-config.json`.
 
-```bash
-
+```json
+{
+    "entrypoints": "0x0000000071727De22E5E9d8BAf0edAc6f37da032", // v0.7 Entrypoint
+    "executor-private-keys": "private-key",
+    "utility-private-key": "private-key",
+    "rpc-url": "https://rpc-quicknode-holesky.morphl2.io",
+    "safe-mode": false,
+    "port": 4337,
+    "chain-type": "op-stack",
+    "legacy-transactions": true
+}
 ```
 
 4. Update L1GasProxy Contract Address in `src/utils/preVerificationGasCalulator.ts:L588`:
@@ -151,7 +203,34 @@ npx local-cors-proxy --proxyUrl http://localhost:4337
 
 ---
 
-## 🔮 Future — Modular Safe Account with Hooks
+## Get Started 🚀
+
+The following repository is a turborepo and divided into the following:
+
+- **apps/web** - The web application built using Vite.
+
+First install the dependencies by running the following:
+
+```bash
+pnpm install && cd apps/web
+```
+
+Then fill in the Environment variables in `apps/www/.env.local`
+
+```bash
+VITE_REOWN_PROJECT_ID="reown-project-id"
+VITE_BUNDLER_URL="http://localhost:8010/proxy"
+```
+
+Then run the following command to start the application:
+
+```bash
+pnpm dev
+```
+
+---
+
+## 🔮 Future - Modular Safe Account with Hooks
 
 The current Karma Wallet is a modified SimpleSmartAccount, but future plans include:
 
