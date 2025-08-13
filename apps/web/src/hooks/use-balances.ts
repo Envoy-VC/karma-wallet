@@ -1,15 +1,14 @@
 import { useMemo } from "react";
 
-import { erc20Abi, zeroAddress } from "viem";
+import { useReadLocalStorage } from "usehooks-ts";
+import { erc20Abi, type Hex, zeroAddress } from "viem";
 import { useBalance, useReadContracts } from "wagmi";
 
 import { PYTH_ADAPTOR_ABI } from "@/data/abi";
 import { ContractAddress, TokenAddress } from "@/data/address";
 
-import { useSmartAccount } from "./use-account";
-
 export const useBalances = () => {
-  const { address } = useSmartAccount();
+  const address = useReadLocalStorage<Hex | null>("karmaAccount");
   const { data: balance } = useBalance({
     address: address ?? undefined,
     query: { enabled: address !== undefined },

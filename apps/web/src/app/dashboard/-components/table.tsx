@@ -24,8 +24,12 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { useLiveQuery } from "dexie-react-hooks";
 import { ChevronsUpDownIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 import { toast } from "sonner";
+
+import { getLastXDeposits, weiToUsd } from "@/db";
+import { useBalances } from "@/hooks";
 
 type DepositEvent = {
   txHash: string;
@@ -198,10 +202,21 @@ export const columns: ColumnDef<DepositEvent>[] = [
 
 export const SavingsTable = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const { ethPrice } = useBalances();
+
+  const deposits = useLiveQuery(async () => {
+    const res = await getLastXDeposits(7);
+    return res.map((d) => ({
+      gasSaved: Number(weiToUsd(d.totalTip, ethPrice)),
+      gasUsed: Number(weiToUsd(d.totalGasSpent, ethPrice)),
+      timestamp: d.timestamp,
+      txHash: d.txHash,
+    }));
+  });
 
   const table = useReactTable({
     columns,
-    data: events,
+    data: deposits ?? [],
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,

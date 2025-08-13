@@ -7,13 +7,17 @@ import { http, usePublicClient, useWalletClient } from "wagmi";
 
 import { JAR_ABI, KARMA_ACCOUNT_ABI } from "@/data/abi";
 import { ContractAddress } from "@/data/address";
+import { db, getDefaultGoal, weiToUsd } from "@/db";
 import { env } from "@/env";
 import { chain, pimlicoClient } from "@/lib/wagmi";
 
+import { useBalances } from "./use-balances";
+
 export const useSmartAccount = () => {
-  const address = useReadLocalStorage<string | null>("karmaAccount");
+  const address = useReadLocalStorage<Hex | null>("karmaAccount");
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
+  const balances = useBalances();
 
   const getClient = async () => {
     if (!address) return null;
@@ -54,15 +58,40 @@ export const useSmartAccount = () => {
       value,
     });
 
-    console.log("Tx Hash: ", hash);
+    await postTransaction(hash);
+  };
 
+  const postTransaction = async (hash: Hex) => {
     const receipt = await publicClient?.getTransactionReceipt({ hash });
 
     const parsed = parseEventLogs({
       abi: [...JAR_ABI, ...KARMA_ACCOUNT_ABI, ...entryPoint07Abi],
       logs: receipt?.logs ?? [],
     });
-    console.log(parsed);
+
+    const depositLog = parsed.filter((e) => e.eventName === "Deposit")[0];
+    if (depositLog) {
+      console.log("Adding Deposit");
+      await db.deposits.add({
+        account: address as Hex,
+        sender: depositLog.args.sender,
+        timestamp: Number(depositLog.args.timestamp),
+        totalGasSpent: Number(depositLog.args.totalGasSpent),
+        totalTip: Number(depositLog.args.totalTip),
+        txHash: hash,
+      });
+      console.log("Added Deposit");
+      console.log("Fetching Default Goal");
+      const defaultGoal = await getDefaultGoal();
+      console.log("Default Goal Fetched", defaultGoal);
+      if (defaultGoal) {
+        console.log("Adding Amount");
+        await defaultGoal.addAmount(
+          Number(weiToUsd(Number(depositLog.args.totalTip), balances.ethPrice)),
+        );
+        console.log("Amount Added");
+      }
+    }
   };
 
   return {

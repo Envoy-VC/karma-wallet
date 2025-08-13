@@ -17,9 +17,6 @@ export class Goal extends Entity<KarmaDB> {
 
   async addAmount(amount: number) {
     await this.db.goals.update(this.id, (goal) => {
-      if (goal.currentAmount + amount > goal.targetAmount) {
-        // TODO: Think about this case
-      }
       goal.currentAmount += amount;
     });
   }

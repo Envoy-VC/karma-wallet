@@ -10,7 +10,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@karma-wallet/ui/components/chart";
+import { useLiveQuery } from "dexie-react-hooks";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
+
+import { getLastWeekChartData } from "@/db";
+import { useBalances } from "@/hooks";
 
 export const description = "A stacked bar chart with a legend";
 
@@ -38,6 +42,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export const WeeklySavingsChart = () => {
+  const balances = useBalances();
+  const chartData = useLiveQuery(
+    async () => await getLastWeekChartData(balances.ethPrice),
+  );
+
   return (
     <Card>
       <CardHeader>
@@ -48,7 +57,7 @@ export const WeeklySavingsChart = () => {
       <CardContent>
         <ChartContainer className="max-h-[20rem] w-full" config={chartConfig}>
           <BarChart
-            // accessibilityLayer={true}
+            accessibilityLayer={true}
             className="flex w-full items-center justify-center"
             data={chartData}
           >
