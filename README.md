@@ -138,7 +138,7 @@ function _calculateTip(uint256 gasUsed) internal view returns (uint256) {
 | Contract | Chain | Address |
 | --- | --- | --- |
 | Karma Account Factory | Morph Holesky | 0xe2567b2a7214877d395dfa6ca72335644b26dc23 |
-| Pyth Adaptor | Ethereum | 0x2ca12ac2cb30b9acbdb6d9c7dcfc895338904a93 |
+| Pyth Adaptor | Morph Holesky | 0x2ca12ac2cb30b9acbdb6d9c7dcfc895338904a93 |
 
 ## 🛠 Self-Host Bundler Guide — Alto Bundler
 
